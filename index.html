@@ -5,1336 +5,1102 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WYC 2026 - Unified Admin Panel</title>
     <style>
-        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-        * { box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #F9FAFB;
+            color: #374151;
+            line-height: 1.6;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 64px;
+            background-color: #FFFFFF;
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            z-index: 1000;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex: 1;
+        }
+
+        .hamburger {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 8px;
+        }
+
+        .hamburger span {
+            width: 20px;
+            height: 2px;
+            background-color: #111827;
+            border-radius: 1px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background-color: #BE123C;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .logo-text h1 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #111827;
+            margin: 0;
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            color: #6B7280;
+            margin: 0;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .notification-bell {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: #374151;
+            font-size: 20px;
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background-color: #DC2626;
+            border-radius: 50%;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #BE123C, #E11D48);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .logout-btn {
+            padding: 8px 16px;
+            background-color: #F3F4F6;
+            border: 1px solid #E5E7EB;
+            border-radius: 6px;
+            cursor: pointer;
+            color: #374151;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background-color: #E5E7EB;
+        }
+
+        .container {
+            display: flex;
+            margin-top: 64px;
+            min-height: calc(100vh - 64px);
+        }
+
+        .sidebar {
+            width: 260px;
+            background-color: #FFFFFF;
+            border-right: 1px solid #E5E7EB;
+            padding: 24px 0;
+            position: fixed;
+            top: 64px;
+            left: 0;
+            height: calc(100vh - 64px);
+            overflow-y: auto;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: #374151;
+            cursor: pointer;
+            text-decoration: none;
+            border-left: 3px solid transparent;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .nav-item:hover {
+            background-color: #F9FAFB;
+        }
+
+        .nav-item.active {
+            background-color: #FEE2E8;
+            color: #BE123C;
+            border-left-color: #BE123C;
+            font-weight: 600;
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .main {
+            margin-left: 260px;
+            flex: 1;
+            padding: 32px;
+            background-color: #F9FAFB;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            font-size: 14px;
+            color: #6B7280;
+            margin-bottom: 32px;
+        }
+
+        .section-header {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+            margin: 32px 0 16px 0;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background-color: #BE123C;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #A01030;
+        }
+
+        .btn-secondary {
+            background-color: #E5E7EB;
+            color: #374151;
+        }
+
+        .btn-secondary:hover {
+            background-color: #D1D5DB;
+        }
+
+        .stat-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .stat-card-header {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        .stat-card-header.csrs {
+            background-color: #EFF6FF;
+            color: #1E40AF;
+        }
+
+        .stat-card-header.at {
+            background-color: #F0FDF4;
+            color: #15803D;
+        }
+
+        .stat-card-header.accred {
+            background-color: #FAF5FF;
+            color: #6D28D9;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #6B7280;
+            margin-top: 8px;
+        }
+
+        .table {
+            width: 100%;
+            background-color: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            border-collapse: collapse;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .table thead {
+            background-color: #F9FAFB;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .table th {
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            color: #374151;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .table td {
+            padding: 14px 16px;
+            font-size: 14px;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background-color: #F9FAFB;
+        }
+
+        .table tbody tr:hover {
+            background-color: #F3F4F6;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .badge-active {
+            background-color: #DCFCE7;
+            color: #166534;
+        }
+
+        .badge-inactive {
+            background-color: #E5E7EB;
+            color: #4B5563;
+        }
+
+        .badge-locked {
+            background-color: #FEE2E8;
+            color: #9D174D;
+        }
+
+        .badge-csrs {
+            background-color: #EFF6FF;
+            color: #1E40AF;
+        }
+
+        .badge-at {
+            background-color: #F0FDF4;
+            color: #15803D;
+        }
+
+        .badge-accred {
+            background-color: #FAF5FF;
+            color: #6D28D9;
+        }
+
+        .badge-admin {
+            background-color: #F3F4F6;
+            color: #4B5563;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .status-dot.green {
+            background-color: #10B981;
+        }
+
+        .status-dot.yellow {
+            background-color: #F59E0B;
+        }
+
+        .tab-bar {
+            display: flex;
+            gap: 16px;
+            border-bottom: 1px solid #E5E7EB;
+            margin-bottom: 20px;
+        }
+
+        .tab-item {
+            padding: 12px 16px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: #6B7280;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab-item:hover {
+            color: #374151;
+        }
+
+        .tab-item.active {
+            color: #BE123C;
+            border-bottom-color: #BE123C;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .pending-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .action-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .action-card-title {
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .action-card-text {
+            font-size: 13px;
+            color: #6B7280;
+            line-height: 1.5;
+        }
+
+        .sync-panels {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .sync-panel {
+            background-color: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .sync-panel-title {
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sync-stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #E5E7EB;
+            font-size: 13px;
+        }
+
+        .sync-stat-row:last-child {
+            border-bottom: none;
+        }
+
+        .sync-stat-label {
+            color: #6B7280;
+        }
+
+        .sync-stat-value {
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            font-size: 15px;
+            margin-bottom: 24px;
+        }
+
+        .search-results {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .result-group {
+            background-color: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .result-group-title {
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .result-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #E5E7EB;
+            font-size: 13px;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #111827;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #E5E7EB;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #BE123C;
+            box-shadow: 0 0 0 3px rgba(190, 18, 60, 0.1);
+        }
+
+        .action-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .action-card-form {
+            background-color: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .action-card-form h3 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #111827;
+        }
+
+        .report-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .report-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .report-card-id {
+            font-size: 12px;
+            font-weight: 600;
+            color: #6B7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .report-card-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .report-card-desc {
+            font-size: 13px;
+            color: #6B7280;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .report-card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .report-card-actions .btn {
+            flex: 1;
+            padding: 8px 12px;
+            font-size: 12px;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .filter-bar select,
+        .filter-bar input {
+            padding: 8px 12px;
+            border: 1px solid #E5E7EB;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .pagination-item {
+            padding: 6px 10px;
+            border: 1px solid #E5E7EB;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #FFFFFF;
+            font-size: 13px;
+        }
+
+        .pagination-item.active {
+            background-color: #BE123C;
+            color: white;
+            border-color: #BE123C;
+        }
+
+        .recent-activity {
+            background-color: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .activity-item {
+            display: flex;
+            padding: 12px 16px;
+            border-bottom: 1px solid #E5E7EB;
+            font-size: 13px;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-time {
+            color: #6B7280;
+            min-width: 60px;
+        }
+
+        .activity-user {
+            color: #374151;
+            font-weight: 500;
+            min-width: 100px;
+        }
+
+        .activity-action {
+            color: #111827;
+            flex: 1;
+        }
+
+        .activity-module {
+            min-width: 80px;
+        }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/recharts/2.15.0/Recharts.min.js"></script>
-    <script src="https://unpkg.com/lucide-react@0.263.1/dist/umd/lucide-react.min.js"></script>
 </head>
 <body>
-    <div id="root"></div>
+    <header class="header">
+        <div class="header-left">
+            <button class="hamburger" onclick="toggleSidebar()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="logo-area">
+                <div class="logo-icon">Y</div>
+                <div class="logo-text">
+                    <h1>WYC 2026 ADMIN</h1>
+                    <p>Unified Administration Panel</p>
+                </div>
+            </div>
+        </div>
+        <div class="header-right">
+            <button class="notification-bell">🔔<div class="notification-dot"></div></button>
+            <div class="user-avatar">SA</div>
+            <button class="logout-btn" onclick="handleLogout()">Logout</button>
+        </div>
+    </header>
 
-    <script type="text/babel">
-        // Destructure React hooks
-        const { useState, useMemo } = React;
+    <div class="container">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-item active" onclick="navigate('dashboard')"><span class="nav-icon">🏠</span><span>Dashboard</span></nav>
+            <nav class="nav-item" onclick="navigate('users')"><span class="nav-icon">👥</span><span>Users & Roles</span></nav>
+            <nav class="nav-item" onclick="navigate('masterdata')"><span class="nav-icon">⚙️</span><span>Master Data</span></nav>
+            <nav class="nav-item" onclick="navigate('integration')"><span class="nav-icon">📊</span><span>Integration Monitor</span></nav>
+            <nav class="nav-item" onclick="navigate('auditlogs')"><span class="nav-icon">📄</span><span>Audit Logs</span></nav>
+            <nav class="nav-item" onclick="navigate('search')"><span class="nav-icon">🔍</span><span>Global Search</span></nav>
+            <nav class="nav-item" onclick="navigate('support')"><span class="nav-icon">🛡️</span><span>Support Desk</span></nav>
+            <nav class="nav-item" onclick="navigate('reports')"><span class="nav-icon">📈</span><span>Reports</span></nav>
+        </aside>
 
-        // Destructure Recharts components
-        const { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } = Recharts;
-
-        // Destructure Lucide React icons
-        const { Menu, X, Search, Filter, Download, Plus, Edit2, Trash2, Eye, EyeOff, ChevronRight, ChevronDown, ChevronUp, Settings, FileText, User, Users, Clock, AlertCircle, CheckCircle, Home, LogOut, Bell, Upload, Calendar, MapPin, Shield, Award, Phone, Mail, Globe, ArrowRight, ArrowLeft, MoreVertical, Check, XCircle, Info, RefreshCw, Loader, Lock, Unlock, ExternalLink, Copy, CreditCard, QrCode, Activity } = lucideReact;
-
-        function WYC2026AdminPanel() {
-  const [activeMenu, setActiveMenu] = useState('home');
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [showAddUserModal, setShowAddUserModal] = useState(false);
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [selectedTab, setSelectedTab] = useState('roles');
-  const [syncPage, setSyncPage] = useState(1);
-  const [auditPage, setAuditPage] = useState(1);
-  const [moduleFilter, setModuleFilter] = useState('all');
-  const [selectedReport, setSelectedReport] = useState(null);
-
-  // Sample Data
-  const summaryCards = [
-    { group: 'CSRS', label: 'Total Registrations', value: 847, color: 'blue', icon: Users },
-    { group: 'CSRS', label: 'Approved', value: 612, color: 'green', icon: CheckCircle },
-    { group: 'CSRS', label: 'Pending Verification', value: 89, color: 'yellow', icon: Clock },
-    { group: 'CSRS', label: 'Corrections', value: 34, color: 'red', icon: AlertCircle },
-    { group: 'A&T', label: 'Rooms Allocated', value: 423, color: 'purple', icon: MapPin },
-    { group: 'A&T', label: 'Arrivals Today', value: 28, color: 'green', icon: ArrowRight },
-    { group: 'A&T', label: 'Departures Today', value: 15, color: 'orange', icon: ArrowLeft },
-    { group: 'A&T', label: 'Unassigned', value: 67, color: 'gray', icon: AlertCircle },
-    { group: 'Accreditation', label: 'Badges Printed', value: 498, color: 'indigo', icon: Award },
-    { group: 'Accreditation', label: 'Issued', value: 412, color: 'green', icon: CheckCircle },
-    { group: 'Accreditation', label: 'Active', value: 405, color: 'blue', icon: Shield },
-    { group: 'Accreditation', label: 'Revoked', value: 7, color: 'red', icon: XCircle },
-  ];
-
-  const syncPanels = [
-    { from: 'CSRS', to: 'A&T', total: 847, synced: 823, failed: 5, pending: 19, lastSync: '2 mins ago', status: 'healthy' },
-    { from: 'CSRS', to: 'Accreditation', total: 612, synced: 598, failed: 8, pending: 6, lastSync: '5 mins ago', status: 'healthy' },
-    { from: 'Accreditation', to: 'A&T', total: 412, synced: 401, failed: 3, pending: 8, lastSync: '3 mins ago', status: 'warning' },
-  ];
-
-  const users = [
-    { id: 1, name: 'Amit Kumar', email: 'amit.kumar@wyc2026.org', role: 'Super Admin', modules: ['CSRS', 'A&T', 'Accreditation', 'Admin'], status: 'Active', lastLogin: '2 mins ago' },
-    { id: 2, name: 'Priya Singh', email: 'priya.singh@wyc2026.org', role: 'OC Admin', modules: ['CSRS', 'A&T', 'Accreditation'], status: 'Active', lastLogin: '15 mins ago' },
-    { id: 3, name: 'Rajesh Verma', email: 'rajesh.verma@wyc2026.org', role: 'OC Verifier', modules: ['CSRS'], status: 'Active', lastLogin: '1 hour ago' },
-    { id: 4, name: 'Neha Patel', email: 'neha.patel@wyc2026.org', role: 'Accommodation Admin', modules: ['A&T', 'Admin'], status: 'Active', lastLogin: '30 mins ago' },
-    { id: 5, name: 'Suresh Sharma', email: 'suresh.sharma@wyc2026.org', role: 'Accommodation Operator', modules: ['A&T'], status: 'Inactive', lastLogin: '5 days ago' },
-    { id: 6, name: 'Divya Nair', email: 'divya.nair@wyc2026.org', role: 'Travel Admin', modules: ['A&T'], status: 'Active', lastLogin: '20 mins ago' },
-    { id: 7, name: 'Karthik Reddy', email: 'karthik.reddy@wyc2026.org', role: 'Travel Operator', modules: ['A&T'], status: 'Active', lastLogin: '45 mins ago' },
-    { id: 8, name: 'Anjali Desai', email: 'anjali.desai@wyc2026.org', role: 'Accreditation Admin', modules: ['Accreditation', 'Admin'], status: 'Active', lastLogin: '10 mins ago' },
-    { id: 9, name: 'Vikram Chauhan', email: 'vikram.chauhan@wyc2026.org', role: 'Accreditation Operator', modules: ['Accreditation'], status: 'Active', lastLogin: '25 mins ago' },
-    { id: 10, name: 'Sneha Iyer', email: 'sneha.iyer@wyc2026.org', role: 'Security Scanner', modules: ['Accreditation'], status: 'Active', lastLogin: '3 mins ago' },
-  ];
-
-  const recentActivity = [
-    { id: 1, action: 'User Registered', details: 'WYC-2026-00847', module: 'CSRS', time: '2 mins ago' },
-    { id: 2, action: 'Accommodation Assigned', details: 'Room 305, Hotel Taj', module: 'A&T', time: '5 mins ago' },
-    { id: 3, action: 'Badge Printed', details: 'Badge-498', module: 'Accreditation', time: '8 mins ago' },
-    { id: 4, action: 'Sync Completed', details: 'CSRS → A&T', module: 'Admin', time: '2 mins ago' },
-    { id: 5, action: 'User Login', details: 'Sneha Iyer', module: 'Admin', time: '3 mins ago' },
-    { id: 6, action: 'Correction Submitted', details: 'WYC-2026-00823', module: 'CSRS', time: '12 mins ago' },
-    { id: 7, action: 'Itinerary Created', details: 'Flight DL234', module: 'A&T', time: '15 mins ago' },
-    { id: 8, action: 'Badge Revoked', details: 'Badge-45', module: 'Accreditation', time: '20 mins ago' },
-    { id: 9, action: 'Delegation Verified', details: 'India Yoga Federation', module: 'CSRS', time: '25 mins ago' },
-    { id: 10, action: 'Payment Processed', details: 'TXN-789456', module: 'Admin', time: '30 mins ago' },
-  ];
-
-  const pendingActions = [
-    { id: 1, action: 'Verify Pending Registrations', count: 89, module: 'CSRS', priority: 'high' },
-    { id: 2, action: 'Process Room Assignments', count: 67, module: 'A&T', priority: 'high' },
-    { id: 3, action: 'Review Badge Requests', count: 24, module: 'Accreditation', priority: 'medium' },
-    { id: 4, action: 'Resolve Sync Failures', count: 5, module: 'Admin', priority: 'high' },
-  ];
-
-  const syncHealthData = [
-    { time: '00:00', csrsAt: 95, csrsAccr: 92, accrAt: 88 },
-    { time: '04:00', csrsAt: 96, csrsAccr: 93, accrAt: 87 },
-    { time: '08:00', csrsAt: 94, csrsAccr: 91, accrAt: 89 },
-    { time: '12:00', csrsAt: 97, csrsAccr: 94, accrAt: 90 },
-    { time: '16:00', csrsAt: 98, csrsAccr: 96, accrAt: 92 },
-    { time: '20:00', csrsAt: 96, csrsAccr: 95, accrAt: 91 },
-    { time: '24:00', csrsAt: 98, csrsAccr: 97, accrAt: 94 },
-  ];
-
-  const failedRecords = [
-    { id: 1, recordId: 'WYC-00234', wycId: 'WYC-2026-00234', source: 'CSRS', destination: 'A&T', error: 'Invalid room type', time: '10 mins ago' },
-    { id: 2, recordId: 'WYC-00567', wycId: 'WYC-2026-00567', source: 'CSRS', destination: 'Accreditation', error: 'Missing email', time: '15 mins ago' },
-    { id: 3, recordId: 'WYC-00789', wycId: 'WYC-2026-00789', source: 'Accreditation', destination: 'A&T', error: 'Badge ID mismatch', time: '20 mins ago' },
-    { id: 4, recordId: 'WYC-00145', wycId: 'WYC-2026-00145', source: 'CSRS', destination: 'A&T', error: 'Duplicate entry', time: '45 mins ago' },
-    { id: 5, recordId: 'WYC-00912', wycId: 'WYC-2026-00912', source: 'CSRS', destination: 'Accreditation', error: 'Verification failed', time: '1 hour ago' },
-  ];
-
-  const rolePermissions = [
-    { role: 'Super Admin', view: true, create: true, edit: true, approve: true, print: true, export: true, admin: true },
-    { role: 'OC Admin', view: true, create: true, edit: true, approve: true, print: true, export: true, admin: false },
-    { role: 'OC Verifier', view: true, create: false, edit: false, approve: true, print: false, export: false, admin: false },
-    { role: 'Accommodation Admin', view: true, create: true, edit: true, approve: false, print: true, export: true, admin: false },
-    { role: 'Accommodation Operator', view: true, create: true, edit: true, approve: false, print: false, export: false, admin: false },
-    { role: 'Travel Admin', view: true, create: true, edit: true, approve: false, print: true, export: true, admin: false },
-    { role: 'Travel Operator', view: true, create: true, edit: true, approve: false, print: false, export: false, admin: false },
-    { role: 'Accreditation Admin', view: true, create: true, edit: true, approve: true, print: true, export: true, admin: false },
-    { role: 'Accreditation Operator', view: true, create: true, edit: true, approve: false, print: true, export: false, admin: false },
-    { role: 'Security Scanner', view: true, create: false, edit: false, approve: false, print: false, export: false, admin: false },
-  ];
-
-  const delegations = [
-    { id: 1, country: 'India', type: 'National Federation', federation: 'Indian Yoga Association', count: 245 },
-    { id: 2, country: 'United States', type: 'Regional Body', federation: 'American Yoga Alliance', count: 156 },
-    { id: 3, country: 'United Kingdom', type: 'National Federation', federation: 'British Yoga Association', count: 98 },
-    { id: 4, country: 'Australia', type: 'Regional Body', federation: 'Australian Yoga Institute', count: 87 },
-    { id: 5, country: 'Canada', type: 'National Federation', federation: 'Yoga Canada', count: 76 },
-    { id: 6, country: 'Germany', type: 'National Federation', federation: 'Deutscher Yoga Verband', count: 134 },
-    { id: 7, country: 'France', type: 'Regional Body', federation: 'Yoga France', count: 95 },
-    { id: 8, country: 'Japan', type: 'National Federation', federation: 'Japan Yoga Association', count: 112 },
-    { id: 9, country: 'Singapore', type: 'Regional Body', federation: 'Singapore Yoga Federation', count: 64 },
-    { id: 10, country: 'Brazil', type: 'National Federation', federation: 'Brazilian Yoga Association', count: 108 },
-    { id: 11, country: 'Mexico', type: 'Regional Body', federation: 'Mexican Yoga Alliance', count: 82 },
-    { id: 12, country: 'South Africa', type: 'National Federation', federation: 'South Africa Yoga', count: 71 },
-    { id: 13, country: 'New Zealand', type: 'Regional Body', federation: 'NZ Yoga Institute', count: 55 },
-    { id: 14, country: 'Netherlands', type: 'National Federation', federation: 'Nederlandse Yoga Bond', count: 89 },
-    { id: 15, country: 'Sweden', type: 'Regional Body', federation: 'Swedish Yoga Federation', count: 67 },
-    { id: 16, country: 'Italy', type: 'National Federation', federation: 'Federazione Yoga Italia', count: 103 },
-    { id: 17, country: 'Spain', type: 'Regional Body', federation: 'Asociación Yoga España', count: 91 },
-    { id: 18, country: 'Thailand', type: 'National Federation', federation: 'Thai Yoga Association', count: 78 },
-    { id: 19, country: 'Malaysia', type: 'Regional Body', federation: 'Malaysian Yoga Federation', count: 62 },
-    { id: 20, country: 'Indonesia', type: 'National Federation', federation: 'Indonesian Yoga Institute', count: 85 },
-  ];
-
-  const properties = [
-    { id: 1, name: 'Hotel Taj Mahal Palace', location: 'New Delhi', rooms: 450, occupied: 398, available: 52 },
-    { id: 2, name: 'Oberoi Grand', location: 'New Delhi', rooms: 380, occupied: 325, available: 55 },
-    { id: 3, name: 'ITC Maurya', location: 'New Delhi', rooms: 420, occupied: 412, available: 8 },
-    { id: 4, name: 'The Leela Palace', location: 'New Delhi', rooms: 350, occupied: 288, available: 62 },
-  ];
-
-  const routes = [
-    { id: 1, name: 'Delhi-Mumbai Express', origin: 'Delhi', destination: 'Mumbai', schedule: 'Daily 6 AM', capacity: 180 },
-    { id: 2, name: 'Delhi-Bangalore Express', origin: 'Delhi', destination: 'Bangalore', schedule: 'Daily 8 AM', capacity: 160 },
-    { id: 3, name: 'Delhi-Kolkata Express', origin: 'Delhi', destination: 'Kolkata', schedule: 'Bi-daily', capacity: 200 },
-    { id: 4, name: 'Delhi-Chennai Express', origin: 'Delhi', destination: 'Chennai', schedule: 'Daily 10 AM', capacity: 180 },
-    { id: 5, name: 'Delhi-Hyderabad Express', origin: 'Delhi', destination: 'Hyderabad', schedule: 'Daily 12 PM', capacity: 150 },
-    { id: 6, name: 'Delhi-Pune Express', origin: 'Delhi', destination: 'Pune', schedule: 'Daily 2 PM', capacity: 120 },
-  ];
-
-  const vehicles = [
-    { id: 1, registrationNo: 'DL-01-AB-1234', type: 'Bus', capacity: 50, status: 'Active', route: 'Delhi-Mumbai Express' },
-    { id: 2, registrationNo: 'DL-01-CD-5678', type: 'Coach', capacity: 45, status: 'Active', route: 'Delhi-Bangalore Express' },
-    { id: 3, registrationNo: 'DL-01-EF-9012', type: 'Bus', capacity: 50, status: 'Maintenance', route: 'Delhi-Kolkata Express' },
-    { id: 4, registrationNo: 'DL-01-GH-3456', type: 'Coach', capacity: 45, status: 'Active', route: 'Delhi-Chennai Express' },
-    { id: 5, registrationNo: 'DL-01-IJ-7890', type: 'Bus', capacity: 50, status: 'Active', route: 'Delhi-Hyderabad Express' },
-  ];
-
-  const badgeTemplates = [
-    { id: 1, name: 'Participant Badge', color: '#BE123C', designFile: 'participant-v1.pdf', active: true },
-    { id: 2, name: 'Volunteer Badge', color: '#8B5CF6', designFile: 'volunteer-v1.pdf', active: true },
-    { id: 3, name: 'Organizer Badge', color: '#059669', designFile: 'organizer-v1.pdf', active: true },
-    { id: 4, name: 'Guest Badge', color: '#0891B2', designFile: 'guest-v1.pdf', active: true },
-    { id: 5, name: 'VIP Badge', color: '#D97706', designFile: 'vip-v1.pdf', active: true },
-  ];
-
-  const accessZones = [
-    { id: 1, name: 'Main Venue', location: 'Indira Gandhi Stadium', accessLevel: 'Public', capacity: 15000 },
-    { id: 2, name: 'VIP Lounge', location: 'North Wing', accessLevel: 'VIP', capacity: 300 },
-    { id: 3, name: 'Meditation Hall', location: 'South Wing', accessLevel: 'Participant', capacity: 2000 },
-    { id: 4, name: 'Media Center', location: 'East Wing', accessLevel: 'Media', capacity: 500 },
-    { id: 5, name: 'Control Room', location: 'Central Tower', accessLevel: 'Staff', capacity: 50 },
-    { id: 6, name: 'Hospitality Lounge', location: 'West Wing', accessLevel: 'Guest', capacity: 400 },
-    { id: 7, name: 'Green Room', location: 'Backstage', accessLevel: 'Performer', capacity: 200 },
-  ];
-
-  const auditLogs = Array.from({ length: 40 }, (_, i) => ({
-    id: i + 1,
-    timestamp: new Date(Date.now() - i * 900000).toLocaleString(),
-    user: users[i % users.length]?.name,
-    module: ['CSRS', 'A&T', 'Accreditation', 'Admin'][i % 4],
-    action: ['Create', 'Edit', 'Delete', 'Approve', 'Reject', 'Verify'][i % 6],
-    entity: ['Registration', 'Accommodation', 'Badge', 'User', 'Route'][i % 5],
-    entityId: `WYC-2026-${String(1000 + i).slice(-5)}`,
-    before: i % 3 === 0 ? 'Pending' : 'Active',
-    after: i % 3 === 0 ? 'Approved' : 'Updated',
-    ip: `192.168.1.${i + 1}`,
-  }));
-
-  const reports = [
-    { id: 'RPT-CSRS-01', name: 'Registration Summary', module: 'CSRS', description: 'Complete registration statistics and trends' },
-    { id: 'RPT-CSRS-02', name: 'Delegations Report', module: 'CSRS', description: 'Delegation-wise breakdown and participation' },
-    { id: 'RPT-CSRS-03', name: 'Approval Status Report', module: 'CSRS', description: 'Approval workflow and pending items' },
-    { id: 'RPT-CSRS-04', name: 'Corrections Analysis', module: 'CSRS', description: 'Data quality and correction trends' },
-    { id: 'RPT-AT-01', name: 'Accommodation Report', module: 'A&T', description: 'Hotel occupancy and room allocation' },
-    { id: 'RPT-AT-02', name: 'Transportation Report', module: 'A&T', description: 'Route usage and vehicle status' },
-    { id: 'RPT-AT-03', name: 'Arrival/Departure Report', module: 'A&T', description: 'Check-in/out statistics' },
-    { id: 'RPT-AT-04', name: 'Itinerary Report', module: 'A&T', description: 'Travel manifests and schedules' },
-    { id: 'RPT-ACCR-01', name: 'Badge Distribution Report', module: 'Accreditation', description: 'Badge printing and issuance statistics' },
-    { id: 'RPT-ACCR-02', name: 'Active Badge Report', module: 'Accreditation', description: 'Current badge holders and status' },
-    { id: 'RPT-ACCR-03', name: 'Revoked Badge Report', module: 'Accreditation', description: 'Revoked and expired badges' },
-    { id: 'RPT-ADM-01', name: 'System Health Report', module: 'Admin', description: 'Sync health and system performance' },
-  ];
-
-  const supportActions = [
-    { id: 1, action: 'Resend OTP', target: 'WYC-2026-00847', performedBy: 'Amit Kumar', time: '10 mins ago', result: 'Success' },
-    { id: 2, action: 'Unlock Account', target: 'WYC-2026-00234', performedBy: 'Priya Singh', time: '25 mins ago', result: 'Success' },
-    { id: 3, action: 'Resync Record', target: 'WYC-2026-00567', performedBy: 'Rajesh Verma', time: '1 hour ago', result: 'Failed' },
-    { id: 4, action: 'Reset Submission', target: 'WYC-2026-00789', performedBy: 'Neha Patel', time: '2 hours ago', result: 'Success' },
-    { id: 5, action: 'Resend OTP', target: 'WYC-2026-00145', performedBy: 'Divya Nair', time: '3 hours ago', result: 'Success' },
-    { id: 6, action: 'Unlock Account', target: 'WYC-2026-00912', performedBy: 'Karthik Reddy', time: '4 hours ago', result: 'Success' },
-    { id: 7, action: 'Resync Record', target: 'WYC-2026-01123', performedBy: 'Anjali Desai', time: '5 hours ago', result: 'Success' },
-    { id: 8, action: 'Reset Submission', target: 'WYC-2026-01456', performedBy: 'Vikram Chauhan', time: '6 hours ago', result: 'Success' },
-    { id: 9, action: 'Resend OTP', target: 'WYC-2026-01789', performedBy: 'Sneha Iyer', time: '7 hours ago', result: 'Success' },
-    { id: 10, action: 'Unlock Account', target: 'WYC-2026-02012', performedBy: 'Amit Kumar', time: '8 hours ago', result: 'Success' },
-    { id: 11, action: 'Resync Record', target: 'WYC-2026-02345', performedBy: 'Priya Singh', time: '9 hours ago', result: 'Success' },
-    { id: 12, action: 'Reset Submission', target: 'WYC-2026-02678', performedBy: 'Rajesh Verma', time: '10 hours ago', result: 'Success' },
-  ];
-
-  const moduleColors = {
-    'CSRS': 'bg-blue-50 text-blue-700 border-blue-200',
-    'A&T': 'bg-green-50 text-green-700 border-green-200',
-    'Accreditation': 'bg-purple-50 text-purple-700 border-purple-200',
-    'Admin': 'bg-gray-50 text-gray-700 border-gray-200',
-  };
-
-  const moduleColorsDark = {
-    'CSRS': 'bg-blue-100 text-blue-800',
-    'A&T': 'bg-green-100 text-green-800',
-    'Accreditation': 'bg-purple-100 text-purple-800',
-    'Admin': 'bg-gray-100 text-gray-800',
-  };
-
-  const menuItems = [
-    { id: 'home', label: 'Dashboard', icon: Home },
-    { id: 'users', label: 'Users & Roles', icon: Users },
-    { id: 'config', label: 'Master Data', icon: Settings },
-    { id: 'integration', label: 'Integration Monitor', icon: RefreshCw },
-    { id: 'audit', label: 'Audit Logs', icon: FileText },
-    { id: 'search', label: 'Global Search', icon: Search },
-    { id: 'support', label: 'Support Desk', icon: AlertCircle },
-    { id: 'reports', label: 'Reports Center', icon: BarChart },
-  ];
-
-  // Paginated data
-  const itemsPerPage = 5;
-  const paginatedFailedRecords = failedRecords.slice((syncPage - 1) * itemsPerPage, syncPage * itemsPerPage);
-  const paginatedAuditLogs = auditLogs.slice((auditPage - 1) * itemsPerPage, auditPage * itemsPerPage);
-
-  const getColorClass = (color) => {
-    const colorMap = {
-      blue: 'text-blue-600 bg-blue-50',
-      green: 'text-green-600 bg-green-50',
-      yellow: 'text-yellow-600 bg-yellow-50',
-      red: 'text-red-600 bg-red-50',
-      purple: 'text-purple-600 bg-purple-50',
-      orange: 'text-orange-600 bg-orange-50',
-      gray: 'text-gray-600 bg-gray-50',
-      indigo: 'text-indigo-600 bg-indigo-50',
-    };
-    return colorMap[color] || 'text-gray-600 bg-gray-50';
-  };
-
-  const renderHome = () => (
-    <div className="space-y-8">
-      <div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Dashboard Overview</h2>
-
-        {['CSRS', 'A&T', 'Accreditation'].map((group) => (
-          <div key={group} className="mb-8">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">{group}</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {summaryCards.filter((card) => card.group === group).map((card, idx) => {
-                const Icon = card.icon;
-                return (
-                  <div key={idx} className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition">
-                    <div className="flex items-start justify-between mb-3">
-                      <Icon className={`w-5 h-5 ${getColorClass(card.color).split(' ')[0]}`} />
+        <main class="main">
+            <div class="screen active" id="dashboard-screen">
+                <h1 class="page-title">Dashboard</h1>
+                <p class="page-subtitle">Welcome back! Here's your system overview.</p>
+                <h3 class="section-header">Module Overview</h3>
+                <div class="stat-cards">
+                    <div class="stat-card"><div class="stat-card-header csrs">CSRS</div><div class="stat-value">847</div><div class="stat-label">Total Registrations</div></div>
+                    <div class="stat-card"><div class="stat-card-header csrs">CSRS</div><div class="stat-value">612</div><div class="stat-label">Approved</div></div>
+                    <div class="stat-card"><div class="stat-card-header csrs">CSRS</div><div class="stat-value">89</div><div class="stat-label">Pending Verification</div></div>
+                    <div class="stat-card"><div class="stat-card-header csrs">CSRS</div><div class="stat-value">34</div><div class="stat-label">Corrections</div></div>
+                    <div class="stat-card"><div class="stat-card-header at">A&T</div><div class="stat-value">423</div><div class="stat-label">Rooms Allocated</div></div>
+                    <div class="stat-card"><div class="stat-card-header at">A&T</div><div class="stat-value">28</div><div class="stat-label">Arrivals Today</div></div>
+                    <div class="stat-card"><div class="stat-card-header at">A&T</div><div class="stat-value">15</div><div class="stat-label">Departures Today</div></div>
+                    <div class="stat-card"><div class="stat-card-header at">A&T</div><div class="stat-value">67</div><div class="stat-label">Unassigned</div></div>
+                    <div class="stat-card"><div class="stat-card-header accred">ACCRED</div><div class="stat-value">498</div><div class="stat-label">Badges Printed</div></div>
+                    <div class="stat-card"><div class="stat-card-header accred">ACCRED</div><div class="stat-value">412</div><div class="stat-label">Issued</div></div>
+                    <div class="stat-card"><div class="stat-card-header accred">ACCRED</div><div class="stat-value">405</div><div class="stat-label">Active</div></div>
+                    <div class="stat-card"><div class="stat-card-header accred">ACCRED</div><div class="stat-value">7</div><div class="stat-label">Revoked</div></div>
+                </div>
+                <h3 class="section-header">Sync Health</h3>
+                <div class="sync-panels">
+                    <div class="sync-panel">
+                        <div class="sync-panel-title">CSRS → A&T <span class="status-dot green"></span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Total Records</span><span class="sync-stat-value">847</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Synced</span><span class="sync-stat-value">823</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Failed</span><span class="sync-stat-value">5</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Pending</span><span class="sync-stat-value">19</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Last Sync</span><span class="sync-stat-value">2 min ago</span></div>
                     </div>
-                    <p className="text-gray-600 text-sm mb-2">{card.label}</p>
-                    <p className="text-3xl font-bold text-gray-900">{card.value}</p>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div>
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">Sync Health Status</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {syncPanels.map((panel, idx) => (
-            <div key={idx} className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <p className="text-sm text-gray-600">{panel.from} → {panel.to}</p>
-                  <p className={`text-lg font-semibold ${panel.status === 'healthy' ? 'text-green-600' : 'text-yellow-600'}`}>
-                    {panel.status === 'healthy' ? 'Healthy' : 'Warning'}
-                  </p>
-                </div>
-                {panel.status === 'healthy' ? (
-                  <CheckCircle className="w-6 h-6 text-green-600" />
-                ) : (
-                  <AlertCircle className="w-6 h-6 text-yellow-600" />
-                )}
-              </div>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Synced:</span>
-                  <span className="font-semibold text-gray-900">{panel.synced}/{panel.total}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Failed:</span>
-                  <span className="font-semibold text-red-600">{panel.failed}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Pending:</span>
-                  <span className="font-semibold text-yellow-600">{panel.pending}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Last Sync:</span>
-                  <span className="font-semibold text-gray-900">{panel.lastSync}</span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-        <h3 className="text-lg font-semibold text-gray-800 mb-6">24-Hour Sync Health Trend</h3>
-        <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={syncHealthData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-            <XAxis dataKey="time" stroke="#6b7280" />
-            <YAxis stroke="#6b7280" />
-            <Tooltip contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb' }} />
-            <Legend />
-            <Line type="monotone" dataKey="csrsAt" stroke="#BE123C" name="CSRS→A&T" strokeWidth={2} dot={false} />
-            <Line type="monotone" dataKey="csrsAccr" stroke="#8B5CF6" name="CSRS→Accreditation" strokeWidth={2} dot={false} />
-            <Line type="monotone" dataKey="accrAt" stroke="#059669" name="Accreditation→A&T" strokeWidth={2} dot={false} />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Recent Activity</h3>
-          <div className="space-y-3">
-            {recentActivity.map((activity) => (
-              <div key={activity.id} className="flex items-start justify-between pb-3 border-b border-gray-100 last:border-0">
-                <div className="flex-1">
-                  <p className="text-sm font-semibold text-gray-900">{activity.action}</p>
-                  <p className="text-xs text-gray-600 mt-1">{activity.details}</p>
-                </div>
-                <div className="text-right">
-                  <span className={`inline-block px-2 py-1 text-xs font-semibold rounded ${moduleColorsDark[activity.module]}`}>
-                    {activity.module}
-                  </span>
-                  <p className="text-xs text-gray-500 mt-2">{activity.time}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Pending Actions</h3>
-          <div className="space-y-3">
-            {pendingActions.map((action) => (
-              <div key={action.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
-                <div className="flex-1">
-                  <p className="text-sm font-semibold text-gray-900">{action.action}</p>
-                  <p className="text-xs text-gray-600 mt-1">{action.count} items pending</p>
-                </div>
-                <div className="text-right">
-                  <span className={`inline-block px-2 py-1 text-xs font-bold rounded ${action.priority === 'high' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'}`}>
-                    {action.priority.toUpperCase()}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderUsers = () => (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-gray-900">User & Role Management</h2>
-        <button onClick={() => setShowAddUserModal(true)} className="flex items-center gap-2 bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-lg transition font-medium">
-          <Plus className="w-4 h-4" /> Add User
-        </button>
-      </div>
-
-      <div className="border-b border-gray-200">
-        <div className="flex gap-8">
-          {[
-            { id: 'users', label: 'Users' },
-            { id: 'permissions', label: 'Permission Matrix' },
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setSelectedTab(tab.id)}
-              className={`px-4 py-3 font-medium transition border-b-2 ${
-                selectedTab === tab.id
-                  ? 'text-rose-600 border-rose-600'
-                  : 'text-gray-600 border-transparent hover:text-gray-900'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {selectedTab === 'users' && (
-        <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-          <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Name</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Email</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Role</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Modules</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Last Login</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((user, idx) => (
-                <tr key={user.id} className={`border-b border-gray-200 hover:bg-gray-50 transition ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
-                  <td className="px-6 py-4 text-sm font-semibold text-gray-900">{user.name}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{user.email}</td>
-                  <td className="px-6 py-4 text-sm font-semibold text-gray-900">{user.role}</td>
-                  <td className="px-6 py-4">
-                    <div className="flex flex-wrap gap-1">
-                      {user.modules.map((mod) => (
-                        <span key={mod} className={`inline-block px-2 py-1 text-xs font-semibold rounded ${moduleColorsDark[mod]}`}>
-                          {mod}
-                        </span>
-                      ))}
+                    <div class="sync-panel">
+                        <div class="sync-panel-title">CSRS → Accreditation <span class="status-dot green"></span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Total Records</span><span class="sync-stat-value">847</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Synced</span><span class="sync-stat-value">810</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Failed</span><span class="sync-stat-value">12</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Pending</span><span class="sync-stat-value">25</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Last Sync</span><span class="sync-stat-value">5 min ago</span></div>
                     </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className={`inline-block px-3 py-1 text-xs font-semibold rounded ${user.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}>
-                      {user.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{user.lastLogin}</td>
-                  <td className="px-6 py-4">
-                    <button className="text-gray-600 hover:text-rose-600 transition">
-                      <MoreVertical className="w-4 h-4" />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {selectedTab === 'permissions' && (
-        <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Role</th>
-                <th className="px-6 py-3 text-center text-xs font-semibold text-gray-700">View</th>
-                <th className="px-6 py-3 text-center text-xs font-semibold text-gray-700">Create</th>
-                <th className="px-6 py-3 text-center text-xs font-semibold text-gray-700">Edit</th>
-                <th className="px-6 py-3 text-center text-xs font-semibold text-gray-700">Approve</th>
-                <th className="px-6 py-3 text-center text-xs font-semibold text-gray-700">Print</th>
-                <th className="px-6 py-3 text-center text-xs font-semibold text-gray-700">Export</th>
-                <th className="px-6 py-3 text-center text-xs font-semibold text-gray-700">Admin</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rolePermissions.map((row, idx) => (
-                <tr key={idx} className={`border-b border-gray-200 ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
-                  <td className="px-6 py-4 text-sm font-semibold text-gray-900">{row.role}</td>
-                  {['view', 'create', 'edit', 'approve', 'print', 'export', 'admin'].map((perm) => (
-                    <td key={perm} className="px-6 py-4 text-center">
-                      {row[perm] ? (
-                        <Check className="w-5 h-5 text-green-600 mx-auto" />
-                      ) : (
-                        <X className="w-5 h-5 text-gray-300 mx-auto" />
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {showAddUserModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-bold text-gray-900">Add New User</h3>
-              <button onClick={() => setShowAddUserModal(false)} className="text-gray-400 hover:text-gray-600">
-                <X className="w-6 h-6" />
-              </button>
-            </div>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
-                <input type="text" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500" />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Email</label>
-                <input type="email" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500" />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Role</label>
-                <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500">
-                  {users.map((u) => <option key={u.id}>{u.role}</option>)}
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-3">Module Access</label>
-                <div className="space-y-2">
-                  {['CSRS', 'A&T', 'Accreditation', 'Admin'].map((mod) => (
-                    <label key={mod} className="flex items-center gap-3 cursor-pointer">
-                      <input type="checkbox" className="w-4 h-4 accent-rose-600" />
-                      <span className="text-sm text-gray-700">{mod}</span>
-                    </label>
-                  ))}
+                    <div class="sync-panel">
+                        <div class="sync-panel-title">Accreditation → A&T <span class="status-dot yellow"></span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Total Records</span><span class="sync-stat-value">412</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Synced</span><span class="sync-stat-value">380</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Failed</span><span class="sync-stat-value">8</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Pending</span><span class="sync-stat-value">24</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Last Sync</span><span class="sync-stat-value">8 min ago</span></div>
+                    </div>
                 </div>
-              </div>
-              <div className="flex gap-3 pt-6 border-t border-gray-200">
-                <button onClick={() => setShowAddUserModal(false)} className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 font-medium transition">
-                  Cancel
-                </button>
-                <button onClick={() => setShowAddUserModal(false)} className="flex-1 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg font-medium transition">
-                  Add User
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-
-  const renderConfig = () => (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-gray-900">Master Data Configuration</h2>
-
-      <div className="border-b border-gray-200 overflow-x-auto">
-        <div className="flex gap-4">
-          {[
-            { id: 'roles', label: 'Roles' },
-            { id: 'delegations', label: 'Delegations' },
-            { id: 'properties', label: 'Properties' },
-            { id: 'routes', label: 'Routes' },
-            { id: 'vehicles', label: 'Vehicles' },
-            { id: 'badges', label: 'Badge Templates' },
-            { id: 'zones', label: 'Access Zones' },
-            { id: 'notifications', label: 'Notifications' },
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setSelectedTab(tab.id)}
-              className={`px-4 py-3 font-medium transition whitespace-nowrap border-b-2 ${
-                selectedTab === tab.id
-                  ? 'text-rose-600 border-rose-600'
-                  : 'text-gray-600 border-transparent hover:text-gray-900'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {selectedTab === 'roles' && (
-        <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-          <div className="p-6 border-b border-gray-200 flex justify-between items-center">
-            <h3 className="font-semibold text-gray-900">Role Mappings</h3>
-            <button className="flex items-center gap-2 bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-lg transition font-medium">
-              <Plus className="w-4 h-4" /> Add Role
-            </button>
-          </div>
-          <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Role Name</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Sub-Roles</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rolePermissions.map((role, idx) => (
-                <tr key={idx} className={`border-b border-gray-200 ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
-                  <td className="px-6 py-4 text-sm font-semibold text-gray-900">{role.role}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">1-5 sub-roles assigned</td>
-                  <td className="px-6 py-4"><span className="inline-block px-3 py-1 text-xs font-semibold rounded bg-green-100 text-green-700">Active</span></td>
-                  <td className="px-6 py-4 flex gap-2"><button><Edit2 className="w-4 h-4 text-gray-600 hover:text-rose-600" /></button><button><Trash2 className="w-4 h-4 text-gray-600 hover:text-rose-600" /></button></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {selectedTab === 'delegations' && (
-        <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-          <div className="p-6 border-b border-gray-200 flex justify-between items-center">
-            <h3 className="font-semibold text-gray-900">Delegations ({delegations.length})</h3>
-            <button className="flex items-center gap-2 bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-lg transition font-medium">
-              <Plus className="w-4 h-4" /> Add Delegation
-            </button>
-          </div>
-          <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Country</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Type</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Federation</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Count</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {delegations.map((del, idx) => (
-                <tr key={del.id} className={`border-b border-gray-200 ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
-                  <td className="px-6 py-4 text-sm font-semibold text-gray-900">{del.country}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{del.type}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{del.federation}</td>
-                  <td className="px-6 py-4 text-sm font-semibold text-gray-900">{del.count}</td>
-                  <td className="px-6 py-4 flex gap-2"><button><Edit2 className="w-4 h-4 text-gray-600 hover:text-rose-600" /></button></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {selectedTab === 'properties' && (
-        <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-          <div className="p-6 border-b border-gray-200 flex justify-between items-center">
-            <h3 className="font-semibold text-gray-900">Properties ({properties.length})</h3>
-            <button className="flex items-center gap-2 bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-lg transition font-medium">
-              <Plus className="w-4 h-4" /> Add Property
-            </button>
-          </div>
-          <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Property Name</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Location</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Total Rooms</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Available</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {properties.map((prop, idx) => (
-                <tr key={prop.id} className={`border-b border-gray-200 ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
-                  <td className="px-6 py-4 text-sm font-semibold text-gray-900">{prop.name}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{prop.location}</td>
-                  <td className="px-6 py-4 text-sm font-semibold text-gray-900">{prop.rooms}</td>
-                  <td className="px-6 py-4 text-sm text-green-600 font-semibold">{prop.available}</td>
-                  <td className="px-6 py-4 flex gap-2"><button><Edit2 className="w-4 h-4 text-gray-600 hover:text-rose-600" /></button></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {selectedTab === 'routes' && (
-        <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-          <div className="p-6 border-b border-gray-200 flex justify-between items-center">
-            <h3 className="font-semibold text-gray-900">Routes ({routes.length})</h3>
-            <button className="flex items-center gap-2 bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-lg transition font-medium">
-              <Plus className="w-4 h-4" /> Add Route
-            </button>
-          </div>
-          <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Route Name</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Origin</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Destination</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Schedule</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Capacity</th>
-              </tr>
-            </thead>
-            <tbody>
-              {routes.map((route, idx) => (
-                <tr key={route.id} className={`border-b border-gray-200 ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
-                  <td className="px-6 py-4 text-sm font-semibold text-gray-900">{route.name}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{route.origin}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{route.destination}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{route.schedule}</td>
-                  <td className="px-6 py-4 text-sm font-semibold text-gray-900">{route.capacity}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {selectedTab === 'vehicles' && (
-        <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-          <div className="p-6 border-b border-gray-200 flex justify-between items-center">
-            <h3 className="font-semibold text-gray-900">Vehicles ({vehicles.length})</h3>
-            <button className="flex items-center gap-2 bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-lg transition font-medium">
-              <Plus className="w-4 h-4" /> Add Vehicle
-            </button>
-          </div>
-          <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Registration No.</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Type</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Capacity</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Route</th>
-              </tr>
-            </thead>
-            <tbody>
-              {vehicles.map((vehicle, idx) => (
-                <tr key={vehicle.id} className={`border-b border-gray-200 ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
-                  <td className="px-6 py-4 text-sm font-semibold text-gray-900">{vehicle.registrationNo}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{vehicle.type}</td>
-                  <td className="px-6 py-4 text-sm font-semibold text-gray-900">{vehicle.capacity}</td>
-                  <td className="px-6 py-4"><span className={`inline-block px-3 py-1 text-xs font-semibold rounded ${vehicle.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>{vehicle.status}</span></td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{vehicle.route}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {selectedTab === 'badges' && (
-        <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-          <div className="p-6 border-b border-gray-200 flex justify-between items-center">
-            <h3 className="font-semibold text-gray-900">Badge Templates ({badgeTemplates.length})</h3>
-            <button className="flex items-center gap-2 bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-lg transition font-medium">
-              <Plus className="w-4 h-4" /> Add Template
-            </button>
-          </div>
-          <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Template Name</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Color</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Design File</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {badgeTemplates.map((template, idx) => (
-                <tr key={template.id} className={`border-b border-gray-200 ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
-                  <td className="px-6 py-4 text-sm font-semibold text-gray-900">{template.name}</td>
-                  <td className="px-6 py-4"><div className="w-8 h-8 rounded" style={{ backgroundColor: template.color }}></div></td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{template.designFile}</td>
-                  <td className="px-6 py-4"><span className="inline-block px-3 py-1 text-xs font-semibold rounded bg-green-100 text-green-700">Active</span></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {selectedTab === 'zones' && (
-        <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-          <div className="p-6 border-b border-gray-200 flex justify-between items-center">
-            <h3 className="font-semibold text-gray-900">Access Zones ({accessZones.length})</h3>
-            <button className="flex items-center gap-2 bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-lg transition font-medium">
-              <Plus className="w-4 h-4" /> Add Zone
-            </button>
-          </div>
-          <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Zone Name</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Location</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Access Level</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Capacity</th>
-              </tr>
-            </thead>
-            <tbody>
-              {accessZones.map((zone, idx) => (
-                <tr key={zone.id} className={`border-b border-gray-200 ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
-                  <td className="px-6 py-4 text-sm font-semibold text-gray-900">{zone.name}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{zone.location}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{zone.accessLevel}</td>
-                  <td className="px-6 py-4 text-sm font-semibold text-gray-900">{zone.capacity}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {selectedTab === 'notifications' && (
-        <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-          <div className="p-6 border-b border-gray-200 flex justify-between items-center">
-            <h3 className="font-semibold text-gray-900">Notification Templates</h3>
-            <button className="flex items-center gap-2 bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-lg transition font-medium">
-              <Plus className="w-4 h-4" /> Add Template
-            </button>
-          </div>
-          <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Event Name</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Module</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Template Type</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {[
-                { event: 'Submission Received', module: 'CSRS', type: 'Email + SMS' },
-                { event: 'Correction Requested', module: 'CSRS', type: 'Email + SMS' },
-                { event: 'Approved', module: 'CSRS', type: 'Email + SMS' },
-                { event: 'Accommodation Assigned', module: 'A&T', type: 'Email' },
-                { event: 'Badge Issued', module: 'Accreditation', type: 'Email + SMS' },
-              ].map((notif, idx) => (
-                <tr key={idx} className={`border-b border-gray-200 ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
-                  <td className="px-6 py-4 text-sm font-semibold text-gray-900">{notif.event}</td>
-                  <td className="px-6 py-4 text-sm"><span className={`inline-block px-2 py-1 text-xs font-semibold rounded ${moduleColorsDark[notif.module]}`}>{notif.module}</span></td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{notif.type}</td>
-                  <td className="px-6 py-4"><span className="inline-block px-3 py-1 text-xs font-semibold rounded bg-green-100 text-green-700">Active</span></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
-  );
-
-  const renderIntegration = () => (
-    <div className="space-y-8">
-      <h2 className="text-2xl font-bold text-gray-900">Integration Monitor</h2>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {syncPanels.map((panel, idx) => (
-          <div key={idx} className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <p className="text-sm font-semibold text-gray-600">{panel.from} → {panel.to}</p>
-                <p className={`text-lg font-bold mt-2 ${panel.status === 'healthy' ? 'text-green-600' : 'text-yellow-600'}`}>
-                  {panel.synced}/{panel.total} Synced
-                </p>
-              </div>
-              {panel.status === 'healthy' ? (
-                <CheckCircle className="w-8 h-8 text-green-600" />
-              ) : (
-                <AlertCircle className="w-8 h-8 text-yellow-600" />
-              )}
-            </div>
-            <div className="space-y-3 text-sm">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Success Rate:</span>
-                <span className="font-semibold text-gray-900">{Math.round((panel.synced / panel.total) * 100)}%</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Failed:</span>
-                <span className="font-semibold text-red-600">{panel.failed}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Pending:</span>
-                <span className="font-semibold text-yellow-600">{panel.pending}</span>
-              </div>
-              <div className="flex justify-between pt-3 border-t border-gray-200">
-                <span className="text-gray-600">Last Sync:</span>
-                <span className="font-semibold text-gray-900">{panel.lastSync}</span>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
-        <div className="p-6 border-b border-gray-200 flex justify-between items-center">
-          <h3 className="text-lg font-semibold text-gray-900">Failed Records</h3>
-          <button className="flex items-center gap-2 bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-lg transition font-medium">
-            <RefreshCw className="w-4 h-4" /> Force Resync
-          </button>
-        </div>
-        <div className="overflow-hidden">
-          <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Record ID</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">WYC ID</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Source</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Destination</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Error</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Time</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {paginatedFailedRecords.map((record, idx) => (
-                <tr key={record.id} className={`border-b border-gray-200 hover:bg-gray-50 transition ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
-                  <td className="px-6 py-4 text-sm font-semibold text-gray-900">{record.recordId}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{record.wycId}</td>
-                  <td className="px-6 py-4 text-sm"><span className={`inline-block px-2 py-1 text-xs font-semibold rounded ${moduleColorsDark[record.source]}`}>{record.source}</span></td>
-                  <td className="px-6 py-4 text-sm"><span className={`inline-block px-2 py-1 text-xs font-semibold rounded ${moduleColorsDark[record.destination]}`}>{record.destination}</span></td>
-                  <td className="px-6 py-4 text-sm text-red-600 font-semibold">{record.error}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{record.time}</td>
-                  <td className="px-6 py-4"><button className="text-rose-600 hover:text-rose-700 font-medium text-sm">Retry</button></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
-          <span className="text-sm text-gray-600">Page {syncPage} of {Math.ceil(failedRecords.length / itemsPerPage)}</span>
-          <div className="flex gap-2">
-            <button onClick={() => setSyncPage(Math.max(1, syncPage - 1))} disabled={syncPage === 1} className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50">
-              <ArrowLeft className="w-4 h-4" />
-            </button>
-            <button onClick={() => setSyncPage(Math.min(Math.ceil(failedRecords.length / itemsPerPage), syncPage + 1))} disabled={syncPage === Math.ceil(failedRecords.length / itemsPerPage)} className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50">
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-        <h3 className="text-lg font-semibold text-gray-800 mb-6">Sync Health Trend (24 Hours)</h3>
-        <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={syncHealthData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-            <XAxis dataKey="time" stroke="#6b7280" />
-            <YAxis stroke="#6b7280" />
-            <Tooltip contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb' }} />
-            <Legend />
-            <Line type="monotone" dataKey="csrsAt" stroke="#BE123C" name="CSRS→A&T" strokeWidth={2} dot={false} />
-            <Line type="monotone" dataKey="csrsAccr" stroke="#8B5CF6" name="CSRS→Accreditation" strokeWidth={2} dot={false} />
-            <Line type="monotone" dataKey="accrAt" stroke="#059669" name="Accreditation→A&T" strokeWidth={2} dot={false} />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
-    </div>
-  );
-
-  const renderAudit = () => (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-gray-900">Audit Logs</h2>
-
-      <div className="flex gap-4 flex-wrap">
-        <div className="flex-1 min-w-[200px]">
-          <select value={moduleFilter} onChange={(e) => setModuleFilter(e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500">
-            <option value="all">All Modules</option>
-            <option value="CSRS">CSRS</option>
-            <option value="A&T">A&T</option>
-            <option value="Accreditation">Accreditation</option>
-            <option value="Admin">Admin</option>
-          </select>
-        </div>
-        <div className="flex-1 min-w-[200px]">
-          <input type="text" placeholder="Search user..." className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500" />
-        </div>
-        <div className="flex-1 min-w-[200px]">
-          <input type="date" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500" />
-        </div>
-        <button className="flex items-center gap-2 bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-lg transition font-medium">
-          <Download className="w-4 h-4" /> Export CSV
-        </button>
-      </div>
-
-      <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Timestamp</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">User</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Module</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Action</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Entity</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Entity ID</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Before</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">After</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">IP</th>
-              </tr>
-            </thead>
-            <tbody>
-              {paginatedAuditLogs.map((log, idx) => (
-                <tr key={log.id} className={`border-b border-gray-200 hover:bg-gray-50 transition ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
-                  <td className="px-6 py-4 text-xs text-gray-600">{log.timestamp}</td>
-                  <td className="px-6 py-4 text-sm font-semibold text-gray-900">{log.user}</td>
-                  <td className="px-6 py-4 text-sm"><span className={`inline-block px-2 py-1 text-xs font-semibold rounded ${moduleColorsDark[log.module]}`}>{log.module}</span></td>
-                  <td className="px-6 py-4 text-sm font-semibold text-gray-900">{log.action}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{log.entity}</td>
-                  <td className="px-6 py-4 text-sm font-mono text-gray-600">{log.entityId}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{log.before}</td>
-                  <td className="px-6 py-4 text-sm font-semibold text-green-600">{log.after}</td>
-                  <td className="px-6 py-4 text-xs text-gray-500">{log.ip}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
-          <span className="text-sm text-gray-600">Page {auditPage} of {Math.ceil(auditLogs.length / itemsPerPage)}</span>
-          <div className="flex gap-2">
-            <button onClick={() => setAuditPage(Math.max(1, auditPage - 1))} disabled={auditPage === 1} className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50">
-              <ArrowLeft className="w-4 h-4" />
-            </button>
-            <button onClick={() => setAuditPage(Math.min(Math.ceil(auditLogs.length / itemsPerPage), auditPage + 1))} disabled={auditPage === Math.ceil(auditLogs.length / itemsPerPage)} className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50">
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderSearch = () => (
-    <div className="space-y-8">
-      <h2 className="text-2xl font-bold text-gray-900">Global Search</h2>
-
-      <div className="bg-white border-2 border-gray-200 rounded-lg shadow-sm p-4">
-        <div className="flex items-center gap-3">
-          <Search className="w-6 h-6 text-gray-400" />
-          <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search by WYC ID, Application ID, Name, or Delegation..." className="flex-1 text-lg outline-none text-gray-900 placeholder-gray-500" />
-        </div>
-      </div>
-
-      {searchQuery && (
-        <div className="space-y-6">
-          <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-            <div className="p-6 border-b border-gray-200 bg-blue-50">
-              <h3 className="text-lg font-semibold text-blue-900">CSRS Results</h3>
-            </div>
-            <div className="divide-y divide-gray-200">
-              {[
-                { id: 'WYC-2026-00847', name: 'Rajesh Kumar', delegation: 'Indian Yoga Association' },
-                { id: 'WYC-2026-00823', name: 'Priya Sharma', delegation: 'Indian Yoga Association' },
-                { id: 'WYC-2026-00789', name: 'Amit Patel', delegation: 'American Yoga Alliance' },
-              ].map((result) => (
-                <div key={result.id} className="p-6 hover:bg-blue-50 transition cursor-pointer flex justify-between items-center">
-                  <div>
-                    <p className="font-semibold text-gray-900">{result.name}</p>
-                    <p className="text-sm text-gray-600">{result.id} • {result.delegation}</p>
-                  </div>
-                  <ChevronRight className="w-5 h-5 text-gray-400" />
+                <h3 class="section-header">Pending Actions</h3>
+                <div class="pending-actions">
+                    <div class="action-card"><div class="action-card-title">89 Registrations Awaiting Verification</div><div class="action-card-text">Review and approve pending CSRS submissions.</div><div style="margin-top: 12px;"><span class="badge badge-csrs">CSRS</span></div></div>
+                    <div class="action-card"><div class="action-card-title">5 Sync Failures Need Retry</div><div class="action-card-text">Records failed to sync. Review and retry manually.</div><div style="margin-top: 12px;"><span class="badge badge-admin">Integration</span></div></div>
+                    <div class="action-card"><div class="action-card-title">12 Credentials Need Correction</div><div class="action-card-text">Invalid badges require admin correction.</div><div style="margin-top: 12px;"><span class="badge badge-accred">Accreditation</span></div></div>
+                    <div class="action-card"><div class="action-card-title">3 Accounts Locked</div><div class="action-card-text">User accounts locked due to failed login attempts.</div><div style="margin-top: 12px;"><span class="badge badge-admin">Support</span></div></div>
                 </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-            <div className="p-6 border-b border-gray-200 bg-green-50">
-              <h3 className="text-lg font-semibold text-green-900">Accommodation & Travel Results</h3>
-            </div>
-            <div className="divide-y divide-gray-200">
-              {[
-                { id: 'WYC-2026-00847', name: 'Rajesh Kumar', details: 'Room 305 • Hotel Taj Mahal Palace' },
-                { id: 'WYC-2026-00823', name: 'Priya Sharma', details: 'Room 412 • Oberoi Grand' },
-              ].map((result) => (
-                <div key={result.id} className="p-6 hover:bg-green-50 transition cursor-pointer flex justify-between items-center">
-                  <div>
-                    <p className="font-semibold text-gray-900">{result.name}</p>
-                    <p className="text-sm text-gray-600">{result.id} • {result.details}</p>
-                  </div>
-                  <ChevronRight className="w-5 h-5 text-gray-400" />
+                <h3 class="section-header">Recent Activity</h3>
+                <div class="recent-activity">
+                    <div class="activity-item"><div class="activity-time">2:45 PM</div><div class="activity-user">Rajesh Kumar</div><div class="activity-action">Approved registration WYC-2026-0847</div><div class="activity-module"><span class="badge badge-csrs">CSRS</span></div></div>
+                    <div class="activity-item"><div class="activity-time">2:32 PM</div><div class="activity-user">Priya Sharma</div><div class="activity-action">Allocated room 307 to delegation Japan</div><div class="activity-module"><span class="badge badge-at">A&T</span></div></div>
+                    <div class="activity-item"><div class="activity-time">2:18 PM</div><div class="activity-user">Kavita Joshi</div><div class="activity-action">Printed badge batch BAG-0045</div><div class="activity-module"><span class="badge badge-accred">Accred</span></div></div>
+                    <div class="activity-item"><div class="activity-time">2:05 PM</div><div class="activity-user">Amit Patel</div><div class="activity-action">Verified documents for WYC-2026-0823</div><div class="activity-module"><span class="badge badge-csrs">CSRS</span></div></div>
+                    <div class="activity-item"><div class="activity-time">1:52 PM</div><div class="activity-user">Neha Gupta</div><div class="activity-action">Updated occupancy for property</div><div class="activity-module"><span class="badge badge-at">A&T</span></div></div>
+                    <div class="activity-item"><div class="activity-time">1:38 PM</div><div class="activity-user">Suresh Nair</div><div class="activity-action">Scanned badge BAG-4521</div><div class="activity-module"><span class="badge badge-accred">Accred</span></div></div>
+                    <div class="activity-item"><div class="activity-time">1:25 PM</div><div class="activity-user">Vikram Singh</div><div class="activity-action">Confirmed arrival USA delegation</div><div class="activity-module"><span class="badge badge-at">A&T</span></div></div>
+                    <div class="activity-item"><div class="activity-time">1:10 PM</div><div class="activity-user">Rohan Verma</div><div class="activity-action">Created badge template Volunteer-2026</div><div class="activity-module"><span class="badge badge-accred">Accred</span></div></div>
+                    <div class="activity-item"><div class="activity-time">12:58 PM</div><div class="activity-user">Anjali Desai</div><div class="activity-action">Assigned transport for Japan</div><div class="activity-module"><span class="badge badge-at">A&T</span></div></div>
+                    <div class="activity-item"><div class="activity-time">12:45 PM</div><div class="activity-user">Rajesh Kumar</div><div class="activity-action">System sync completed successfully</div><div class="activity-module"><span class="badge badge-admin">Admin</span></div></div>
                 </div>
-              ))}
             </div>
-          </div>
 
-          <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-            <div className="p-6 border-b border-gray-200 bg-purple-50">
-              <h3 className="text-lg font-semibold text-purple-900">Accreditation Results</h3>
-            </div>
-            <div className="divide-y divide-gray-200">
-              {[
-                { id: 'Badge-498', name: 'Rajesh Kumar', status: 'Active' },
-                { id: 'Badge-497', name: 'Priya Sharma', status: 'Issued' },
-              ].map((result) => (
-                <div key={result.id} className="p-6 hover:bg-purple-50 transition cursor-pointer flex justify-between items-center">
-                  <div>
-                    <p className="font-semibold text-gray-900">{result.name}</p>
-                    <p className="text-sm text-gray-600">{result.id} • Status: {result.status}</p>
-                  </div>
-                  <ChevronRight className="w-5 h-5 text-gray-400" />
+            <div class="screen" id="users-screen">
+                <h1 class="page-title">Users & Roles</h1>
+                <p class="page-subtitle">Manage system users and permissions.</p>
+                <div class="tab-bar">
+                    <button class="tab-item active" onclick="switchTab(event, 'users-tab')">Users</button>
+                    <button class="tab-item" onclick="switchTab(event, 'permissions-tab')">Permission Matrix</button>
                 </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {!searchQuery && (
-        <div className="text-center py-16">
-          <Search className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <p className="text-gray-500 text-lg">Enter search terms to find participants, accommodations, badges, and more</p>
-        </div>
-      )}
-    </div>
-  );
-
-  const renderSupport = () => (
-    <div className="space-y-8">
-      <h2 className="text-2xl font-bold text-gray-900">Support Desk</h2>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {[
-          { title: 'Resend OTP', description: 'Send OTP to participant email', icon: Mail },
-          { title: 'Unlock Account', description: 'Unlock locked participant accounts', icon: Unlock },
-          { title: 'Resync Record', description: 'Force sync failed records', icon: RefreshCw },
-          { title: 'Reset Submission', description: 'Reset registration submission', icon: RefreshCw },
-        ].map((action, idx) => {
-          const Icon = action.icon;
-          return (
-            <div key={idx} className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition">
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900">{action.title}</h3>
-                  <p className="text-sm text-gray-600 mt-1">{action.description}</p>
+                <div class="tab-content active" id="users-tab">
+                    <button class="btn btn-primary">+ Add User</button>
+                    <table class="table" style="margin-top: 20px;">
+                        <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Module Access</th><th>Status</th><th>Last Login</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>Rajesh Kumar</strong></td><td>rajesh@wyc2026.org</td><td>Super Admin</td><td><span class="badge badge-csrs">CSRS</span> <span class="badge badge-at">A&T</span> <span class="badge badge-accred">Accred</span></td><td><span class="badge badge-active">Active</span></td><td>Today 2:50 PM</td></tr>
+                            <tr><td><strong>Priya Sharma</strong></td><td>priya@wyc2026.org</td><td>OC Admin</td><td><span class="badge badge-csrs">CSRS</span> <span class="badge badge-at">A&T</span></td><td><span class="badge badge-active">Active</span></td><td>Today 1:30 PM</td></tr>
+                            <tr><td><strong>Amit Patel</strong></td><td>amit@wyc2026.org</td><td>OC Verifier</td><td><span class="badge badge-csrs">CSRS</span></td><td><span class="badge badge-active">Active</span></td><td>Today 12:15 PM</td></tr>
+                            <tr><td><strong>Neha Gupta</strong></td><td>neha@wyc2026.org</td><td>Accommodation Admin</td><td><span class="badge badge-at">A&T</span></td><td><span class="badge badge-active">Active</span></td><td>Today 2:20 PM</td></tr>
+                            <tr><td><strong>Vikram Singh</strong></td><td>vikram@wyc2026.org</td><td>Accommodation Operator</td><td><span class="badge badge-at">A&T</span></td><td><span class="badge badge-active">Active</span></td><td>Today 10:45 AM</td></tr>
+                            <tr><td><strong>Anjali Desai</strong></td><td>anjali@wyc2026.org</td><td>Travel Admin</td><td><span class="badge badge-at">A&T</span></td><td><span class="badge badge-active">Active</span></td><td>Yesterday 5:30 PM</td></tr>
+                            <tr><td><strong>Rohan Verma</strong></td><td>rohan@wyc2026.org</td><td>Accreditation Admin</td><td><span class="badge badge-accred">Accred</span></td><td><span class="badge badge-locked">Locked</span></td><td>3 days ago</td></tr>
+                            <tr><td><strong>Kavita Joshi</strong></td><td>kavita@wyc2026.org</td><td>Accreditation Operator</td><td><span class="badge badge-accred">Accred</span></td><td><span class="badge badge-active">Active</span></td><td>Today 11:00 AM</td></tr>
+                            <tr><td><strong>Suresh Nair</strong></td><td>suresh@wyc2026.org</td><td>Security Scanner</td><td><span class="badge badge-accred">Accred</span></td><td><span class="badge badge-active">Active</span></td><td>Today 2:35 PM</td></tr>
+                            <tr><td><strong>Deepa Menon</strong></td><td>deepa@wyc2026.org</td><td>Helpdesk Viewer</td><td><span class="badge badge-csrs">CSRS</span> <span class="badge badge-at">A&T</span> <span class="badge badge-accred">Accred</span></td><td><span class="badge badge-inactive">Inactive</span></td><td>1 month ago</td></tr>
+                        </tbody>
+                    </table>
                 </div>
-                <Icon className="w-6 h-6 text-rose-600" />
-              </div>
-              <div className="space-y-3 pt-4 border-t border-gray-200">
-                <input type="text" placeholder="Search by WYC ID or Email..." className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500 text-sm" />
-                <button onClick={() => setShowConfirmModal(true)} className="w-full bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-lg transition font-medium text-sm">
-                  Execute Action
-                </button>
-              </div>
+                <div class="tab-content" id="permissions-tab">
+                    <table class="table">
+                        <thead><tr><th>Role</th><th>View</th><th>Create</th><th>Edit</th><th>Approve</th><th>Delete</th><th>Print</th><th>Export</th><th>Admin</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>Super Admin</strong></td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+                            <tr><td><strong>OC Admin</strong></td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>—</td><td>—</td><td>✓</td><td>—</td></tr>
+                            <tr><td><strong>OC Verifier</strong></td><td>✓</td><td>—</td><td>—</td><td>✓</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                            <tr><td><strong>Accommodation Admin</strong></td><td>✓</td><td>✓</td><td>✓</td><td>—</td><td>—</td><td>—</td><td>✓</td><td>—</td></tr>
+                            <tr><td><strong>Accommodation Operator</strong></td><td>✓</td><td>✓</td><td>✓</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                            <tr><td><strong>Travel Admin</strong></td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>—</td><td>—</td><td>✓</td><td>—</td></tr>
+                            <tr><td><strong>Accreditation Admin</strong></td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>—</td><td>✓</td><td>✓</td><td>—</td></tr>
+                            <tr><td><strong>Accreditation Operator</strong></td><td>✓</td><td>—</td><td>—</td><td>—</td><td>—</td><td>✓</td><td>—</td><td>—</td></tr>
+                            <tr><td><strong>Security Scanner</strong></td><td>✓</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                            <tr><td><strong>Helpdesk Viewer</strong></td><td>✓</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-          );
-        })}
-      </div>
 
-      <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
-        <div className="p-6 border-b border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900">Support Action History</h3>
-        </div>
-        <table className="w-full">
-          <thead className="bg-gray-50 border-b border-gray-200">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Action</th>
-              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Target</th>
-              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Performed By</th>
-              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Time</th>
-              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700">Result</th>
-            </tr>
-          </thead>
-          <tbody>
-            {supportActions.map((action, idx) => (
-              <tr key={action.id} className={`border-b border-gray-200 ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
-                <td className="px-6 py-4 text-sm font-semibold text-gray-900">{action.action}</td>
-                <td className="px-6 py-4 text-sm text-gray-600">{action.target}</td>
-                <td className="px-6 py-4 text-sm text-gray-600">{action.performedBy}</td>
-                <td className="px-6 py-4 text-sm text-gray-600">{action.time}</td>
-                <td className="px-6 py-4">
-                  <span className={`inline-block px-3 py-1 text-xs font-semibold rounded ${action.result === 'Success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                    {action.result}
-                  </span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {showConfirmModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
-            <h3 className="text-lg font-bold text-gray-900 mb-4">Confirm Action</h3>
-            <p className="text-gray-600 mb-6">Are you sure you want to execute this support action? This operation cannot be undone.</p>
-            <div className="flex gap-3">
-              <button onClick={() => setShowConfirmModal(false)} className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 font-medium transition">
-                Cancel
-              </button>
-              <button onClick={() => setShowConfirmModal(false)} className="flex-1 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg font-medium transition">
-                Confirm
-              </button>
+            <div class="screen" id="masterdata-screen">
+                <h1 class="page-title">Master Data</h1>
+                <p class="page-subtitle">Manage core configuration and reference data.</p>
+                <div class="tab-bar">
+                    <button class="tab-item active" onclick="switchTab(event, 'roles-tab')">Roles</button>
+                    <button class="tab-item" onclick="switchTab(event, 'delegations-tab')">Delegations</button>
+                    <button class="tab-item" onclick="switchTab(event, 'properties-tab')">Properties</button>
+                    <button class="tab-item" onclick="switchTab(event, 'zones-tab')">Zones</button>
+                </div>
+                <div class="tab-content active" id="roles-tab">
+                    <button class="btn btn-primary">+ Add Role</button>
+                    <table class="table" style="margin-top: 20px;">
+                        <thead><tr><th>Role</th><th>Sub-roles</th><th>Count</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>Athlete</strong></td><td>Male Individual, Female Individual, Male Group, Female Group</td><td>4</td></tr>
+                            <tr><td><strong>Support Staff</strong></td><td>Coach, Doctor, Physiotherapist, Trainer, Manager</td><td>5</td></tr>
+                            <tr><td><strong>Technical Official</strong></td><td>Judge, Referee, Coordinator, Technical Delegate</td><td>4</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-content" id="delegations-tab">
+                    <button class="btn btn-primary">+ Add Delegation</button>
+                    <table class="table" style="margin-top: 20px;">
+                        <thead><tr><th>Name</th><th>Country</th><th>Athletes</th><th>Status</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>India</strong></td><td>India</td><td>156</td><td><span class="badge badge-active">Active</span></td></tr>
+                            <tr><td><strong>Japan</strong></td><td>Japan</td><td>89</td><td><span class="badge badge-active">Active</span></td></tr>
+                            <tr><td><strong>USA</strong></td><td>USA</td><td>124</td><td><span class="badge badge-active">Active</span></td></tr>
+                            <tr><td><strong>Brazil</strong></td><td>Brazil</td><td>95</td><td><span class="badge badge-active">Active</span></td></tr>
+                            <tr><td><strong>Germany</strong></td><td>Germany</td><td>78</td><td><span class="badge badge-active">Active</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-content" id="properties-tab">
+                    <button class="btn btn-primary">+ Add Property</button>
+                    <table class="table" style="margin-top: 20px;">
+                        <thead><tr><th>Name</th><th>Category</th><th>Rooms</th><th>Status</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>Grand Plaza Hotel</strong></td><td>5-Star</td><td>250</td><td><span class="badge badge-active">Active</span></td></tr>
+                            <tr><td><strong>Taj Convention</strong></td><td>5-Star</td><td>180</td><td><span class="badge badge-active">Active</span></td></tr>
+                            <tr><td><strong>Royal Inn</strong></td><td>4-Star</td><td>150</td><td><span class="badge badge-active">Active</span></td></tr>
+                            <tr><td><strong>City Guest House</strong></td><td>3-Star</td><td>95</td><td><span class="badge badge-active">Active</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-content" id="zones-tab">
+                    <button class="btn btn-primary">+ Add Zone</button>
+                    <table class="table" style="margin-top: 20px;">
+                        <thead><tr><th>Name</th><th>Level</th><th>Description</th><th>Status</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>Training Ground</strong></td><td>1</td><td>Main venue for yoga sessions</td><td><span class="badge badge-active">Active</span></td></tr>
+                            <tr><td><strong>Stadium</strong></td><td>2</td><td>Ceremony venue</td><td><span class="badge badge-active">Active</span></td></tr>
+                            <tr><td><strong>Admin Wing</strong></td><td>3</td><td>Restricted admin access</td><td><span class="badge badge-active">Active</span></td></tr>
+                            <tr><td><strong>Medical Center</strong></td><td>1</td><td>Medical facilities</td><td><span class="badge badge-active">Active</span></td></tr>
+                            <tr><td><strong>Media Center</strong></td><td>2</td><td>Media broadcasters</td><td><span class="badge badge-active">Active</span></td></tr>
+                            <tr><td><strong>VIP Lounge</strong></td><td>3</td><td>Distinguished guests</td><td><span class="badge badge-active">Active</span></td></tr>
+                            <tr><td><strong>Cafeteria</strong></td><td>1</td><td>Food and refreshment</td><td><span class="badge badge-active">Active</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-          </div>
-        </div>
-      )}
+
+            <div class="screen" id="integration-screen">
+                <h1 class="page-title">Integration Monitor</h1>
+                <p class="page-subtitle">Real-time sync status across modules.</p>
+                <div class="sync-panels">
+                    <div class="sync-panel">
+                        <div class="sync-panel-title">CSRS → A&T <span class="status-dot green"></span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Total</span><span class="sync-stat-value">847</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Synced</span><span class="sync-stat-value">823</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Failed</span><span class="sync-stat-value">5</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Pending</span><span class="sync-stat-value">19</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Last</span><span class="sync-stat-value">2 min</span></div>
+                    </div>
+                    <div class="sync-panel">
+                        <div class="sync-panel-title">CSRS → Accred <span class="status-dot green"></span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Total</span><span class="sync-stat-value">847</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Synced</span><span class="sync-stat-value">810</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Failed</span><span class="sync-stat-value">12</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Pending</span><span class="sync-stat-value">25</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Last</span><span class="sync-stat-value">5 min</span></div>
+                    </div>
+                    <div class="sync-panel">
+                        <div class="sync-panel-title">Accred → A&T <span class="status-dot yellow"></span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Total</span><span class="sync-stat-value">412</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Synced</span><span class="sync-stat-value">380</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Failed</span><span class="sync-stat-value">8</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Pending</span><span class="sync-stat-value">24</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Last</span><span class="sync-stat-value">8 min</span></div>
+                    </div>
+                </div>
+                <h3 class="section-header">Failed Records</h3>
+                <table class="table">
+                    <thead><tr><th>Record ID</th><th>WYC ID</th><th>Source</th><th>Dest</th><th>Error</th><th>Timestamp</th></tr></thead>
+                    <tbody>
+                        <tr><td>REC-0001</td><td>WYC-2026-0801</td><td>CSRS</td><td>A&T</td><td>Duplicate assignment</td><td>27 Feb 2:15 PM</td></tr>
+                        <tr><td>REC-0002</td><td>WYC-2026-0812</td><td>CSRS</td><td>Accred</td><td>Missing ID</td><td>27 Feb 2:10 PM</td></tr>
+                        <tr><td>REC-0003</td><td>WYC-2026-0825</td><td>CSRS</td><td>A&T</td><td>Invalid date</td><td>27 Feb 2:05 PM</td></tr>
+                        <tr><td>REC-0004</td><td>WYC-2026-0838</td><td>Accred</td><td>A&T</td><td>Status mismatch</td><td>27 Feb 1:58 PM</td></tr>
+                        <tr><td>REC-0005</td><td>WYC-2026-0841</td><td>CSRS</td><td>Accred</td><td>Timeout</td><td>27 Feb 1:45 PM</td></tr>
+                    </tbody>
+                </table>
+                <button class="btn btn-primary" style="margin-top: 20px;">Force Resync All</button>
+            </div>
+
+            <div class="screen" id="auditlogs-screen">
+                <h1 class="page-title">Audit Logs</h1>
+                <p class="page-subtitle">Complete record of system activities.</p>
+                <div class="filter-bar">
+                    <select style="min-width: 150px;"><option>All Modules</option><option>CSRS</option><option>A&T</option><option>Accred</option></select>
+                    <input type="text" placeholder="Search...">
+                    <input type="date">
+                </div>
+                <table class="table">
+                    <thead><tr><th>Time</th><th>User</th><th>Module</th><th>Action</th><th>Entity</th><th>Before</th><th>After</th></tr></thead>
+                    <tbody>
+                        <tr><td>27 Feb 2:50 PM</td><td>Rajesh Kumar</td><td><span class="badge badge-csrs">CSRS</span></td><td>Approve</td><td>Reg</td><td>Pending</td><td>Approved</td></tr>
+                        <tr><td>27 Feb 2:45 PM</td><td>Priya Sharma</td><td><span class="badge badge-at">A&T</span></td><td>Allocate</td><td>Room</td><td>—</td><td>Japan</td></tr>
+                        <tr><td>27 Feb 2:35 PM</td><td>Kavita Joshi</td><td><span class="badge badge-accred">Accred</span></td><td>Print</td><td>Badge</td><td>Ready</td><td>Printed</td></tr>
+                        <tr><td>27 Feb 2:20 PM</td><td>Amit Patel</td><td><span class="badge badge-csrs">CSRS</span></td><td>Verify</td><td>Doc</td><td>Pending</td><td>Verified</td></tr>
+                        <tr><td>27 Feb 2:10 PM</td><td>Neha Gupta</td><td><span class="badge badge-at">A&T</span></td><td>Update</td><td>Property</td><td>95</td><td>94</td></tr>
+                    </tbody>
+                </table>
+                <div class="pagination"><div class="pagination-item active">1</div><div class="pagination-item">2</div><div class="pagination-item">3</div></div>
+            </div>
+
+            <div class="screen" id="search-screen">
+                <h1 class="page-title">Global Search</h1>
+                <p class="page-subtitle">Search across all modules unified.</p>
+                <input type="text" class="search-bar" placeholder="Search by WYC ID, name, delegation, room, badge..." value="WYC-2026-001">
+                <div class="search-results">
+                    <div class="result-group">
+                        <div class="result-group-title">CSRS Results</div>
+                        <div class="result-item"><div style="font-weight: 600;">WYC-2026-0010</div><div style="color: #6B7280; font-size: 12px;">Status: Approved | Anjali Desai | India | 25 Feb</div></div>
+                    </div>
+                    <div class="result-group">
+                        <div class="result-group-title">A&T Results</div>
+                        <div class="result-item"><div style="font-weight: 600;">Room Assignment</div><div style="color: #6B7280; font-size: 12px;">Room 102, Grand Plaza | 1 Mar - 7 Mar | Confirmed</div></div>
+                    </div>
+                    <div class="result-group">
+                        <div class="result-group-title">Accreditation</div>
+                        <div class="result-item"><div style="font-weight: 600;">Badge Status</div><div style="color: #6B7280; font-size: 12px;">BAG-0010 | Athlete | Issued | 25 Feb</div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="screen" id="support-screen">
+                <h1 class="page-title">Support Desk</h1>
+                <p class="page-subtitle">Quick action utilities for support staff.</p>
+                <div class="action-cards-grid">
+                    <div class="action-card-form"><h3>Resend OTP</h3><div class="form-group"><label class="form-label">Email or Phone</label><input type="text" class="form-input" placeholder="user@wyc2026.org"></div><button class="btn btn-primary" style="width: 100%;">Resend OTP</button></div>
+                    <div class="action-card-form"><h3>Unlock Account</h3><div class="form-group"><label class="form-label">User Email</label><input type="email" class="form-input" placeholder="user@wyc2026.org"></div><button class="btn btn-primary" style="width: 100%;">Unlock</button></div>
+                    <div class="action-card-form"><h3>Resync Record</h3><div class="form-group"><label class="form-label">WYC ID</label><input type="text" class="form-input" placeholder="WYC-2026-0001"></div><div class="form-group"><label class="form-label">Direction</label><select class="form-input"><option>CSRS → A&T</option><option>CSRS → Accred</option></select></div><button class="btn btn-primary" style="width: 100%;">Resync</button></div>
+                    <div class="action-card-form"><h3>Reset Submission</h3><div class="form-group"><label class="form-label">WYC ID</label><input type="text" class="form-input" placeholder="WYC-2026-0001"></div><div class="form-group"><label class="form-label">Reason</label><textarea class="form-input" style="min-height: 60px;"></textarea></div><button class="btn btn-primary" style="width: 100%;">Reset</button></div>
+                </div>
+                <h3 class="section-header">Support Action Log</h3>
+                <table class="table">
+                    <thead><tr><th>Action</th><th>Target</th><th>By</th><th>Time</th><th>Result</th></tr></thead>
+                    <tbody>
+                        <tr><td>Resend OTP</td><td>priya@wyc</td><td>Deepa</td><td>2:40 PM</td><td><span class="badge badge-active">Success</span></td></tr>
+                        <tr><td>Unlock Account</td><td>rohan@wyc</td><td>Rajesh</td><td>2:30 PM</td><td><span class="badge badge-active">Success</span></td></tr>
+                        <tr><td>Resync Record</td><td>WYC-0823</td><td>Deepa</td><td>2:15 PM</td><td><span class="badge badge-active">Success</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="screen" id="reports-screen">
+                <h1 class="page-title">Reports Center</h1>
+                <p class="page-subtitle">Generate and export reports from all modules.</p>
+                <div class="report-cards">
+                    <div class="report-card"><div class="report-card-id">RPT-CSRS-01</div><div class="report-card-name">Submission Pipeline</div><span class="badge badge-csrs">CSRS</span><div class="report-card-desc">Breakdown by status and delegation.</div><div class="report-card-actions"><button class="btn btn-primary">Generate</button><button class="btn btn-secondary">Export</button></div></div>
+                    <div class="report-card"><div class="report-card-id">RPT-AT-01</div><div class="report-card-name">Rooming List</div><span class="badge badge-at">A&T</span><div class="report-card-desc">Room assignments and occupancy.</div><div class="report-card-actions"><button class="btn btn-primary">Generate</button><button class="btn btn-secondary">Export</button></div></div>
+                    <div class="report-card"><div class="report-card-id">RPT-ACC-01</div><div class="report-card-name">Ready to Print Queue</div><span class="badge badge-accred">Accred</span><div class="report-card-desc">Badges ready for printing.</div><div class="report-card-actions"><button class="btn btn-primary">Generate</button><button class="btn btn-secondary">Export</button></div></div>
+                    <div class="report-card"><div class="report-card-id">RPT-CSRS-02</div><div class="report-card-name">Delegation Roster</div><span class="badge badge-csrs">CSRS</span><div class="report-card-desc">Athletes and support staff.</div><div class="report-card-actions"><button class="btn btn-primary">Generate</button><button class="btn btn-secondary">Export</button></div></div>
+                    <div class="report-card"><div class="report-card-id">RPT-AT-02</div><div class="report-card-name">Occupancy Summary</div><span class="badge badge-at">A&T</span><div class="report-card-desc">Occupancy rates by property.</div><div class="report-card-actions"><button class="btn btn-primary">Generate</button><button class="btn btn-secondary">Export</button></div></div>
+                    <div class="report-card"><div class="report-card-id">RPT-ACC-02</div><div class="report-card-name">Issuance Log</div><span class="badge badge-accred">Accred</span><div class="report-card-desc">Complete badge issuance log.</div><div class="report-card-actions"><button class="btn btn-primary">Generate</button><button class="btn btn-secondary">Export</button></div></div>
+                </div>
+            </div>
+        </main>
     </div>
-  );
 
-  const renderReports = () => (
-    <div className="space-y-8">
-      <h2 className="text-2xl font-bold text-gray-900">Reports Center</h2>
+    <script>
+        function navigate(screen) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screen + '-screen').classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            event.target.closest('.nav-item').classList.add('active');
+        }
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {reports.map((report) => (
-          <div key={report.id} className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition cursor-pointer" onClick={() => setSelectedReport(report)}>
-            <div className="flex items-start justify-between mb-3">
-              <h3 className="font-semibold text-gray-900">{report.name}</h3>
-              <span className={`px-2 py-1 text-xs font-semibold rounded ${moduleColorsDark[report.module]}`}>
-                {report.module}
-              </span>
-            </div>
-            <p className="text-sm text-gray-600 mb-4">{report.description}</p>
-            <button className="w-full bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-lg transition font-medium text-sm">
-              Generate Report
-            </button>
-          </div>
-        ))}
-      </div>
+        function switchTab(event, tabId) {
+            event.preventDefault();
+            const tabContent = document.getElementById(tabId);
+            const tabBar = event.target.closest('.tab-bar');
+            if (!tabContent || !tabBar) return;
+            tabBar.querySelectorAll('.tab-item').forEach(item => item.classList.remove('active'));
+            event.target.classList.add('active');
+            const parent = tabContent.parentElement;
+            parent.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            tabContent.classList.add('active');
+        }
 
-      {selectedReport && (
-        <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
-          <div className="p-6 border-b border-gray-200 flex justify-between items-center">
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900">{selectedReport.name}</h3>
-              <p className="text-sm text-gray-600 mt-1">Report ID: {selectedReport.id}</p>
-            </div>
-            <button onClick={() => setSelectedReport(null)} className="text-gray-400 hover:text-gray-600">
-              <X className="w-6 h-6" />
-            </button>
-          </div>
-          <div className="p-6">
-            <p className="text-gray-600 mb-6">{selectedReport.description}</p>
-            <div className="bg-gray-50 rounded-lg p-6 mb-6">
-              <p className="text-center text-gray-600 py-8">Report preview will be displayed here</p>
-            </div>
-            <div className="flex gap-3">
-              <button className="flex-1 flex items-center justify-center gap-2 bg-rose-600 hover:bg-rose-700 text-white px-4 py-3 rounded-lg transition font-medium">
-                <Download className="w-4 h-4" /> Download PDF
-              </button>
-              <button className="flex-1 flex items-center justify-center gap-2 border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-3 rounded-lg transition font-medium">
-                <FileText className="w-4 h-4" /> View Details
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.style.display = sidebar.style.display === 'none' ? 'block' : 'none';
+        }
 
-  return (
-    <div className="flex h-screen bg-white">
-      <div className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-white border-r border-gray-200 transition-all duration-300 flex flex-col`}>
-        <div className="h-16 flex items-center justify-between px-4 border-b border-gray-200">
-          {sidebarOpen && <h1 className="text-lg font-bold text-gray-900">WYC 2026</h1>}
-          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="text-gray-600 hover:text-gray-900">
-            {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
-        </div>
+        function handleLogout() {
+            alert('Logout would redirect to login page');
+        }
 
-        <nav className="flex-1 overflow-y-auto py-4">
-          <div className="space-y-2 px-3">
-            {menuItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveMenu(item.id)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition ${
-                    activeMenu === item.id
-                      ? 'bg-rose-50 text-rose-600 border border-rose-200'
-                      : 'text-gray-700 hover:bg-gray-50'
-                  }`}
-                >
-                  <Icon className="w-5 h-5 flex-shrink-0" />
-                  {sidebarOpen && <span className="text-sm font-medium">{item.label}</span>}
-                </button>
-              );
-            })}
-          </div>
-        </nav>
-
-        <div className="border-t border-gray-200 p-4">
-          <div className={`flex items-center ${sidebarOpen ? 'gap-3' : 'justify-center'}`}>
-            <div className="w-10 h-10 rounded-full bg-rose-100 flex items-center justify-center flex-shrink-0">
-              <User className="w-5 h-5 text-rose-600" />
-            </div>
-            {sidebarOpen && (
-              <button className="text-gray-600 hover:text-gray-900">
-                <LogOut className="w-5 h-5" />
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <div className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8">
-          <div className="flex items-center gap-4">
-            <Bell className="w-5 h-5 text-gray-600 cursor-pointer hover:text-gray-900" />
-            <Settings className="w-5 h-5 text-gray-600 cursor-pointer hover:text-gray-900" />
-          </div>
-        </div>
-
-        <div className="flex-1 overflow-auto bg-white">
-          <div className="p-8">
-            {activeMenu === 'home' && renderHome()}
-            {activeMenu === 'users' && renderUsers()}
-            {activeMenu === 'config' && renderConfig()}
-            {activeMenu === 'integration' && renderIntegration()}
-            {activeMenu === 'audit' && renderAudit()}
-            {activeMenu === 'search' && renderSearch()}
-            {activeMenu === 'support' && renderSupport()}
-            {activeMenu === 'reports' && renderReports()}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-        
-        // Render the component
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(React.createElement(WYC2026AdminPanel));
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('.nav-item').classList.add('active');
+            document.getElementById('dashboard-screen').classList.add('active');
+        });
     </script>
 </body>
 </html>
