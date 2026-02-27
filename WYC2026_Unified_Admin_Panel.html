@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WYC 2026 - Unified Admin Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #F9FAFB;
+            color: #374151;
+            line-height: 1.6;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 64px;
+            background-color: #FFFFFF;
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            z-index: 1000;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex: 1;
+        }
+
+        .hamburger {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 8px;
+        }
+
+        .hamburger span {
+            width: 20px;
+            height: 2px;
+            background-color: #111827;
+            border-radius: 1px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background-color: #BE123C;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .logo-text h1 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #111827;
+            margin: 0;
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            color: #6B7280;
+            margin: 0;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .notification-bell {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: #374151;
+            font-size: 20px;
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background-color: #DC2626;
+            border-radius: 50%;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #BE123C, #E11D48);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .logout-btn {
+            padding: 8px 16px;
+            background-color: #F3F4F6;
+            border: 1px solid #E5E7EB;
+            border-radius: 6px;
+            cursor: pointer;
+            color: #374151;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background-color: #E5E7EB;
+        }
+
+        .container {
+            display: flex;
+            margin-top: 64px;
+            min-height: calc(100vh - 64px);
+        }
+
+        .sidebar {
+            width: 260px;
+            background-color: #FFFFFF;
+            border-right: 1px solid #E5E7EB;
+            padding: 24px 0;
+            position: fixed;
+            top: 64px;
+            left: 0;
+            height: calc(100vh - 64px);
+            overflow-y: auto;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: #374151;
+            cursor: pointer;
+            text-decoration: none;
+            border-left: 3px solid transparent;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .nav-item:hover {
+            background-color: #F9FAFB;
+        }
+
+        .nav-item.active {
+            background-color: #FEE2E8;
+            color: #BE123C;
+            border-left-color: #BE123C;
+            font-weight: 600;
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .main {
+            margin-left: 260px;
+            flex: 1;
+            padding: 32px;
+            background-color: #F9FAFB;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            font-size: 14px;
+            color: #6B7280;
+            margin-bottom: 32px;
+        }
+
+        .section-header {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+            margin: 32px 0 16px 0;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background-color: #BE123C;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #A01030;
+        }
+
+        .btn-secondary {
+            background-color: #E5E7EB;
+            color: #374151;
+        }
+
+        .btn-secondary:hover {
+            background-color: #D1D5DB;
+        }
+
+        .stat-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .stat-card-header {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        .stat-card-header.csrs {
+            background-color: #EFF6FF;
+            color: #1E40AF;
+        }
+
+        .stat-card-header.at {
+            background-color: #F0FDF4;
+            color: #15803D;
+        }
+
+        .stat-card-header.accred {
+            background-color: #FAF5FF;
+            color: #6D28D9;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #6B7280;
+            margin-top: 8px;
+        }
+
+        .table {
+            width: 100%;
+            background-color: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            border-collapse: collapse;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .table thead {
+            background-color: #F9FAFB;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .table th {
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            color: #374151;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .table td {
+            padding: 14px 16px;
+            font-size: 14px;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background-color: #F9FAFB;
+        }
+
+        .table tbody tr:hover {
+            background-color: #F3F4F6;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .badge-active {
+            background-color: #DCFCE7;
+            color: #166534;
+        }
+
+        .badge-inactive {
+            background-color: #E5E7EB;
+            color: #4B5563;
+        }
+
+        .badge-locked {
+            background-color: #FEE2E8;
+            color: #9D174D;
+        }
+
+        .badge-csrs {
+            background-color: #EFF6FF;
+            color: #1E40AF;
+        }
+
+        .badge-at {
+            background-color: #F0FDF4;
+            color: #15803D;
+        }
+
+        .badge-accred {
+            background-color: #FAF5FF;
+            color: #6D28D9;
+        }
+
+        .badge-admin {
+            background-color: #F3F4F6;
+            color: #4B5563;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .status-dot.green {
+            background-color: #10B981;
+        }
+
+        .status-dot.yellow {
+            background-color: #F59E0B;
+        }
+
+        .tab-bar {
+            display: flex;
+            gap: 16px;
+            border-bottom: 1px solid #E5E7EB;
+            margin-bottom: 20px;
+        }
+
+        .tab-item {
+            padding: 12px 16px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: #6B7280;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab-item:hover {
+            color: #374151;
+        }
+
+        .tab-item.active {
+            color: #BE123C;
+            border-bottom-color: #BE123C;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .pending-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .action-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .action-card-title {
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .action-card-text {
+            font-size: 13px;
+            color: #6B7280;
+            line-height: 1.5;
+        }
+
+        .sync-panels {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .sync-panel {
+            background-color: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .sync-panel-title {
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sync-stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #E5E7EB;
+            font-size: 13px;
+        }
+
+        .sync-stat-row:last-child {
+            border-bottom: none;
+        }
+
+        .sync-stat-label {
+            color: #6B7280;
+        }
+
+        .sync-stat-value {
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            font-size: 15px;
+            margin-bottom: 24px;
+        }
+
+        .search-results {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .result-group {
+            background-color: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .result-group-title {
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .result-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #E5E7EB;
+            font-size: 13px;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #111827;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #E5E7EB;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #BE123C;
+            box-shadow: 0 0 0 3px rgba(190, 18, 60, 0.1);
+        }
+
+        .action-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .action-card-form {
+            background-color: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .action-card-form h3 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #111827;
+        }
+
+        .report-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .report-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .report-card-id {
+            font-size: 12px;
+            font-weight: 600;
+            color: #6B7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .report-card-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .report-card-desc {
+            font-size: 13px;
+            color: #6B7280;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .report-card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .report-card-actions .btn {
+            flex: 1;
+            padding: 8px 12px;
+            font-size: 12px;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .filter-bar select,
+        .filter-bar input {
+            padding: 8px 12px;
+            border: 1px solid #E5E7EB;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .pagination-item {
+            padding: 6px 10px;
+            border: 1px solid #E5E7EB;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #FFFFFF;
+            font-size: 13px;
+        }
+
+        .pagination-item.active {
+            background-color: #BE123C;
+            color: white;
+            border-color: #BE123C;
+        }
+
+        .recent-activity {
+            background-color: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .activity-item {
+            display: flex;
+            padding: 12px 16px;
+            border-bottom: 1px solid #E5E7EB;
+            font-size: 13px;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-time {
+            color: #6B7280;
+            min-width: 60px;
+        }
+
+        .activity-user {
+            color: #374151;
+            font-weight: 500;
+            min-width: 100px;
+        }
+
+        .activity-action {
+            color: #111827;
+            flex: 1;
+        }
+
+        .activity-module {
+            min-width: 80px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <button class="hamburger" onclick="toggleSidebar()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="logo-area">
+                <div class="logo-icon">Y</div>
+                <div class="logo-text">
+                    <h1>WYC 2026 ADMIN</h1>
+                    <p>Unified Administration Panel</p>
+                </div>
+            </div>
+        </div>
+        <div class="header-right">
+            <button class="notification-bell">🔔<div class="notification-dot"></div></button>
+            <div class="user-avatar">SA</div>
+            <button class="logout-btn" onclick="handleLogout()">Logout</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar" id="sidebar">
+            <nav class="nav-item active" onclick="navigate('dashboard')"><span class="nav-icon">🏠</span><span>Dashboard</span></nav>
+            <nav class="nav-item" onclick="navigate('users')"><span class="nav-icon">👥</span><span>Users & Roles</span></nav>
+            <nav class="nav-item" onclick="navigate('masterdata')"><span class="nav-icon">⚙️</span><span>Master Data</span></nav>
+            <nav class="nav-item" onclick="navigate('integration')"><span class="nav-icon">📊</span><span>Integration Monitor</span></nav>
+            <nav class="nav-item" onclick="navigate('auditlogs')"><span class="nav-icon">📄</span><span>Audit Logs</span></nav>
+            <nav class="nav-item" onclick="navigate('search')"><span class="nav-icon">🔍</span><span>Global Search</span></nav>
+            <nav class="nav-item" onclick="navigate('support')"><span class="nav-icon">🛡️</span><span>Support Desk</span></nav>
+            <nav class="nav-item" onclick="navigate('reports')"><span class="nav-icon">📈</span><span>Reports</span></nav>
+        </aside>
+
+        <main class="main">
+            <div class="screen active" id="dashboard-screen">
+                <h1 class="page-title">Dashboard</h1>
+                <p class="page-subtitle">Welcome back! Here's your system overview.</p>
+                <h3 class="section-header">Module Overview</h3>
+                <div class="stat-cards">
+                    <div class="stat-card"><div class="stat-card-header csrs">CSRS</div><div class="stat-value">847</div><div class="stat-label">Total Registrations</div></div>
+                    <div class="stat-card"><div class="stat-card-header csrs">CSRS</div><div class="stat-value">612</div><div class="stat-label">Approved</div></div>
+                    <div class="stat-card"><div class="stat-card-header csrs">CSRS</div><div class="stat-value">89</div><div class="stat-label">Pending Verification</div></div>
+                    <div class="stat-card"><div class="stat-card-header csrs">CSRS</div><div class="stat-value">34</div><div class="stat-label">Corrections</div></div>
+                    <div class="stat-card"><div class="stat-card-header at">A&T</div><div class="stat-value">423</div><div class="stat-label">Rooms Allocated</div></div>
+                    <div class="stat-card"><div class="stat-card-header at">A&T</div><div class="stat-value">28</div><div class="stat-label">Arrivals Today</div></div>
+                    <div class="stat-card"><div class="stat-card-header at">A&T</div><div class="stat-value">15</div><div class="stat-label">Departures Today</div></div>
+                    <div class="stat-card"><div class="stat-card-header at">A&T</div><div class="stat-value">67</div><div class="stat-label">Unassigned</div></div>
+                    <div class="stat-card"><div class="stat-card-header accred">ACCRED</div><div class="stat-value">498</div><div class="stat-label">Badges Printed</div></div>
+                    <div class="stat-card"><div class="stat-card-header accred">ACCRED</div><div class="stat-value">412</div><div class="stat-label">Issued</div></div>
+                    <div class="stat-card"><div class="stat-card-header accred">ACCRED</div><div class="stat-value">405</div><div class="stat-label">Active</div></div>
+                    <div class="stat-card"><div class="stat-card-header accred">ACCRED</div><div class="stat-value">7</div><div class="stat-label">Revoked</div></div>
+                </div>
+                <h3 class="section-header">Sync Health</h3>
+                <div class="sync-panels">
+                    <div class="sync-panel">
+                        <div class="sync-panel-title">CSRS → A&T <span class="status-dot green"></span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Total Records</span><span class="sync-stat-value">847</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Synced</span><span class="sync-stat-value">823</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Failed</span><span class="sync-stat-value">5</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Pending</span><span class="sync-stat-value">19</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Last Sync</span><span class="sync-stat-value">2 min ago</span></div>
+                    </div>
+                    <div class="sync-panel">
+                        <div class="sync-panel-title">CSRS → Accreditation <span class="status-dot green"></span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Total Records</span><span class="sync-stat-value">847</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Synced</span><span class="sync-stat-value">810</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Failed</span><span class="sync-stat-value">12</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Pending</span><span class="sync-stat-value">25</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Last Sync</span><span class="sync-stat-value">5 min ago</span></div>
+                    </div>
+                    <div class="sync-panel">
+                        <div class="sync-panel-title">Accreditation → A&T <span class="status-dot yellow"></span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Total Records</span><span class="sync-stat-value">412</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Synced</span><span class="sync-stat-value">380</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Failed</span><span class="sync-stat-value">8</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Pending</span><span class="sync-stat-value">24</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Last Sync</span><span class="sync-stat-value">8 min ago</span></div>
+                    </div>
+                </div>
+                <h3 class="section-header">Pending Actions</h3>
+                <div class="pending-actions">
+                    <div class="action-card"><div class="action-card-title">89 Registrations Awaiting Verification</div><div class="action-card-text">Review and approve pending CSRS submissions.</div><div style="margin-top: 12px;"><span class="badge badge-csrs">CSRS</span></div></div>
+                    <div class="action-card"><div class="action-card-title">5 Sync Failures Need Retry</div><div class="action-card-text">Records failed to sync. Review and retry manually.</div><div style="margin-top: 12px;"><span class="badge badge-admin">Integration</span></div></div>
+                    <div class="action-card"><div class="action-card-title">12 Credentials Need Correction</div><div class="action-card-text">Invalid badges require admin correction.</div><div style="margin-top: 12px;"><span class="badge badge-accred">Accreditation</span></div></div>
+                    <div class="action-card"><div class="action-card-title">3 Accounts Locked</div><div class="action-card-text">User accounts locked due to failed login attempts.</div><div style="margin-top: 12px;"><span class="badge badge-admin">Support</span></div></div>
+                </div>
+                <h3 class="section-header">Recent Activity</h3>
+                <div class="recent-activity">
+                    <div class="activity-item"><div class="activity-time">2:45 PM</div><div class="activity-user">Rajesh Kumar</div><div class="activity-action">Approved registration WYC-2026-0847</div><div class="activity-module"><span class="badge badge-csrs">CSRS</span></div></div>
+                    <div class="activity-item"><div class="activity-time">2:32 PM</div><div class="activity-user">Priya Sharma</div><div class="activity-action">Allocated room 307 to delegation Japan</div><div class="activity-module"><span class="badge badge-at">A&T</span></div></div>
+                    <div class="activity-item"><div class="activity-time">2:18 PM</div><div class="activity-user">Kavita Joshi</div><div class="activity-action">Printed badge batch BAG-0045</div><div class="activity-module"><span class="badge badge-accred">Accred</span></div></div>
+                    <div class="activity-item"><div class="activity-time">2:05 PM</div><div class="activity-user">Amit Patel</div><div class="activity-action">Verified documents for WYC-2026-0823</div><div class="activity-module"><span class="badge badge-csrs">CSRS</span></div></div>
+                    <div class="activity-item"><div class="activity-time">1:52 PM</div><div class="activity-user">Neha Gupta</div><div class="activity-action">Updated occupancy for property</div><div class="activity-module"><span class="badge badge-at">A&T</span></div></div>
+                    <div class="activity-item"><div class="activity-time">1:38 PM</div><div class="activity-user">Suresh Nair</div><div class="activity-action">Scanned badge BAG-4521</div><div class="activity-module"><span class="badge badge-accred">Accred</span></div></div>
+                    <div class="activity-item"><div class="activity-time">1:25 PM</div><div class="activity-user">Vikram Singh</div><div class="activity-action">Confirmed arrival USA delegation</div><div class="activity-module"><span class="badge badge-at">A&T</span></div></div>
+                    <div class="activity-item"><div class="activity-time">1:10 PM</div><div class="activity-user">Rohan Verma</div><div class="activity-action">Created badge template Volunteer-2026</div><div class="activity-module"><span class="badge badge-accred">Accred</span></div></div>
+                    <div class="activity-item"><div class="activity-time">12:58 PM</div><div class="activity-user">Anjali Desai</div><div class="activity-action">Assigned transport for Japan</div><div class="activity-module"><span class="badge badge-at">A&T</span></div></div>
+                    <div class="activity-item"><div class="activity-time">12:45 PM</div><div class="activity-user">Rajesh Kumar</div><div class="activity-action">System sync completed successfully</div><div class="activity-module"><span class="badge badge-admin">Admin</span></div></div>
+                </div>
+            </div>
+
+            <div class="screen" id="users-screen">
+                <h1 class="page-title">Users & Roles</h1>
+                <p class="page-subtitle">Manage system users and permissions.</p>
+                <div class="tab-bar">
+                    <button class="tab-item active" onclick="switchTab(event, 'users-tab')">Users</button>
+                    <button class="tab-item" onclick="switchTab(event, 'permissions-tab')">Permission Matrix</button>
+                </div>
+                <div class="tab-content active" id="users-tab">
+                    <button class="btn btn-primary">+ Add User</button>
+                    <table class="table" style="margin-top: 20px;">
+                        <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Module Access</th><th>Status</th><th>Last Login</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>Rajesh Kumar</strong></td><td>rajesh@wyc2026.org</td><td>Super Admin</td><td><span class="badge badge-csrs">CSRS</span> <span class="badge badge-at">A&T</span> <span class="badge badge-accred">Accred</span></td><td><span class="badge badge-active">Active</span></td><td>Today 2:50 PM</td></tr>
+                            <tr><td><strong>Priya Sharma</strong></td><td>priya@wyc2026.org</td><td>OC Admin</td><td><span class="badge badge-csrs">CSRS</span> <span class="badge badge-at">A&T</span></td><td><span class="badge badge-active">Active</span></td><td>Today 1:30 PM</td></tr>
+                            <tr><td><strong>Amit Patel</strong></td><td>amit@wyc2026.org</td><td>OC Verifier</td><td><span class="badge badge-csrs">CSRS</span></td><td><span class="badge badge-active">Active</span></td><td>Today 12:15 PM</td></tr>
+                            <tr><td><strong>Neha Gupta</strong></td><td>neha@wyc2026.org</td><td>Accommodation Admin</td><td><span class="badge badge-at">A&T</span></td><td><span class="badge badge-active">Active</span></td><td>Today 2:20 PM</td></tr>
+                            <tr><td><strong>Vikram Singh</strong></td><td>vikram@wyc2026.org</td><td>Accommodation Operator</td><td><span class="badge badge-at">A&T</span></td><td><span class="badge badge-active">Active</span></td><td>Today 10:45 AM</td></tr>
+                            <tr><td><strong>Anjali Desai</strong></td><td>anjali@wyc2026.org</td><td>Travel Admin</td><td><span class="badge badge-at">A&T</span></td><td><span class="badge badge-active">Active</span></td><td>Yesterday 5:30 PM</td></tr>
+                            <tr><td><strong>Rohan Verma</strong></td><td>rohan@wyc2026.org</td><td>Accreditation Admin</td><td><span class="badge badge-accred">Accred</span></td><td><span class="badge badge-locked">Locked</span></td><td>3 days ago</td></tr>
+                            <tr><td><strong>Kavita Joshi</strong></td><td>kavita@wyc2026.org</td><td>Accreditation Operator</td><td><span class="badge badge-accred">Accred</span></td><td><span class="badge badge-active">Active</span></td><td>Today 11:00 AM</td></tr>
+                            <tr><td><strong>Suresh Nair</strong></td><td>suresh@wyc2026.org</td><td>Security Scanner</td><td><span class="badge badge-accred">Accred</span></td><td><span class="badge badge-active">Active</span></td><td>Today 2:35 PM</td></tr>
+                            <tr><td><strong>Deepa Menon</strong></td><td>deepa@wyc2026.org</td><td>Helpdesk Viewer</td><td><span class="badge badge-csrs">CSRS</span> <span class="badge badge-at">A&T</span> <span class="badge badge-accred">Accred</span></td><td><span class="badge badge-inactive">Inactive</span></td><td>1 month ago</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-content" id="permissions-tab">
+                    <table class="table">
+                        <thead><tr><th>Role</th><th>View</th><th>Create</th><th>Edit</th><th>Approve</th><th>Delete</th><th>Print</th><th>Export</th><th>Admin</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>Super Admin</strong></td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+                            <tr><td><strong>OC Admin</strong></td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>—</td><td>—</td><td>✓</td><td>—</td></tr>
+                            <tr><td><strong>OC Verifier</strong></td><td>✓</td><td>—</td><td>—</td><td>✓</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                            <tr><td><strong>Accommodation Admin</strong></td><td>✓</td><td>✓</td><td>✓</td><td>—</td><td>—</td><td>—</td><td>✓</td><td>—</td></tr>
+                            <tr><td><strong>Accommodation Operator</strong></td><td>✓</td><td>✓</td><td>✓</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                            <tr><td><strong>Travel Admin</strong></td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>—</td><td>—</td><td>✓</td><td>—</td></tr>
+                            <tr><td><strong>Accreditation Admin</strong></td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>—</td><td>✓</td><td>✓</td><td>—</td></tr>
+                            <tr><td><strong>Accreditation Operator</strong></td><td>✓</td><td>—</td><td>—</td><td>—</td><td>—</td><td>✓</td><td>—</td><td>—</td></tr>
+                            <tr><td><strong>Security Scanner</strong></td><td>✓</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                            <tr><td><strong>Helpdesk Viewer</strong></td><td>✓</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="screen" id="masterdata-screen">
+                <h1 class="page-title">Master Data</h1>
+                <p class="page-subtitle">Manage core configuration and reference data.</p>
+                <div class="tab-bar">
+                    <button class="tab-item active" onclick="switchTab(event, 'roles-tab')">Roles</button>
+                    <button class="tab-item" onclick="switchTab(event, 'delegations-tab')">Delegations</button>
+                    <button class="tab-item" onclick="switchTab(event, 'properties-tab')">Properties</button>
+                    <button class="tab-item" onclick="switchTab(event, 'zones-tab')">Zones</button>
+                </div>
+                <div class="tab-content active" id="roles-tab">
+                    <button class="btn btn-primary">+ Add Role</button>
+                    <table class="table" style="margin-top: 20px;">
+                        <thead><tr><th>Role</th><th>Sub-roles</th><th>Count</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>Athlete</strong></td><td>Male Individual, Female Individual, Male Group, Female Group</td><td>4</td></tr>
+                            <tr><td><strong>Support Staff</strong></td><td>Coach, Doctor, Physiotherapist, Trainer, Manager</td><td>5</td></tr>
+                            <tr><td><strong>Technical Official</strong></td><td>Judge, Referee, Coordinator, Technical Delegate</td><td>4</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-content" id="delegations-tab">
+                    <button class="btn btn-primary">+ Add Delegation</button>
+                    <table class="table" style="margin-top: 20px;">
+                        <thead><tr><th>Name</th><th>Country</th><th>Athletes</th><th>Status</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>India</strong></td><td>India</td><td>156</td><td><span class="badge badge-active">Active</span></td></tr>
+                            <tr><td><strong>Japan</strong></td><td>Japan</td><td>89</td><td><span class="badge badge-active">Active</span></td></tr>
+                            <tr><td><strong>USA</strong></td><td>USA</td><td>124</td><td><span class="badge badge-active">Active</span></td></tr>
+                            <tr><td><strong>Brazil</strong></td><td>Brazil</td><td>95</td><td><span class="badge badge-active">Active</span></td></tr>
+                            <tr><td><strong>Germany</strong></td><td>Germany</td><td>78</td><td><span class="badge badge-active">Active</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-content" id="properties-tab">
+                    <button class="btn btn-primary">+ Add Property</button>
+                    <table class="table" style="margin-top: 20px;">
+                        <thead><tr><th>Name</th><th>Category</th><th>Rooms</th><th>Status</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>Grand Plaza Hotel</strong></td><td>5-Star</td><td>250</td><td><span class="badge badge-active">Active</span></td></tr>
+                            <tr><td><strong>Taj Convention</strong></td><td>5-Star</td><td>180</td><td><span class="badge badge-active">Active</span></td></tr>
+                            <tr><td><strong>Royal Inn</strong></td><td>4-Star</td><td>150</td><td><span class="badge badge-active">Active</span></td></tr>
+                            <tr><td><strong>City Guest House</strong></td><td>3-Star</td><td>95</td><td><span class="badge badge-active">Active</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-content" id="zones-tab">
+                    <button class="btn btn-primary">+ Add Zone</button>
+                    <table class="table" style="margin-top: 20px;">
+                        <thead><tr><th>Name</th><th>Level</th><th>Description</th><th>Status</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>Training Ground</strong></td><td>1</td><td>Main venue for yoga sessions</td><td><span class="badge badge-active">Active</span></td></tr>
+                            <tr><td><strong>Stadium</strong></td><td>2</td><td>Ceremony venue</td><td><span class="badge badge-active">Active</span></td></tr>
+                            <tr><td><strong>Admin Wing</strong></td><td>3</td><td>Restricted admin access</td><td><span class="badge badge-active">Active</span></td></tr>
+                            <tr><td><strong>Medical Center</strong></td><td>1</td><td>Medical facilities</td><td><span class="badge badge-active">Active</span></td></tr>
+                            <tr><td><strong>Media Center</strong></td><td>2</td><td>Media broadcasters</td><td><span class="badge badge-active">Active</span></td></tr>
+                            <tr><td><strong>VIP Lounge</strong></td><td>3</td><td>Distinguished guests</td><td><span class="badge badge-active">Active</span></td></tr>
+                            <tr><td><strong>Cafeteria</strong></td><td>1</td><td>Food and refreshment</td><td><span class="badge badge-active">Active</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="screen" id="integration-screen">
+                <h1 class="page-title">Integration Monitor</h1>
+                <p class="page-subtitle">Real-time sync status across modules.</p>
+                <div class="sync-panels">
+                    <div class="sync-panel">
+                        <div class="sync-panel-title">CSRS → A&T <span class="status-dot green"></span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Total</span><span class="sync-stat-value">847</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Synced</span><span class="sync-stat-value">823</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Failed</span><span class="sync-stat-value">5</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Pending</span><span class="sync-stat-value">19</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Last</span><span class="sync-stat-value">2 min</span></div>
+                    </div>
+                    <div class="sync-panel">
+                        <div class="sync-panel-title">CSRS → Accred <span class="status-dot green"></span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Total</span><span class="sync-stat-value">847</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Synced</span><span class="sync-stat-value">810</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Failed</span><span class="sync-stat-value">12</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Pending</span><span class="sync-stat-value">25</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Last</span><span class="sync-stat-value">5 min</span></div>
+                    </div>
+                    <div class="sync-panel">
+                        <div class="sync-panel-title">Accred → A&T <span class="status-dot yellow"></span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Total</span><span class="sync-stat-value">412</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Synced</span><span class="sync-stat-value">380</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Failed</span><span class="sync-stat-value">8</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Pending</span><span class="sync-stat-value">24</span></div>
+                        <div class="sync-stat-row"><span class="sync-stat-label">Last</span><span class="sync-stat-value">8 min</span></div>
+                    </div>
+                </div>
+                <h3 class="section-header">Failed Records</h3>
+                <table class="table">
+                    <thead><tr><th>Record ID</th><th>WYC ID</th><th>Source</th><th>Dest</th><th>Error</th><th>Timestamp</th></tr></thead>
+                    <tbody>
+                        <tr><td>REC-0001</td><td>WYC-2026-0801</td><td>CSRS</td><td>A&T</td><td>Duplicate assignment</td><td>27 Feb 2:15 PM</td></tr>
+                        <tr><td>REC-0002</td><td>WYC-2026-0812</td><td>CSRS</td><td>Accred</td><td>Missing ID</td><td>27 Feb 2:10 PM</td></tr>
+                        <tr><td>REC-0003</td><td>WYC-2026-0825</td><td>CSRS</td><td>A&T</td><td>Invalid date</td><td>27 Feb 2:05 PM</td></tr>
+                        <tr><td>REC-0004</td><td>WYC-2026-0838</td><td>Accred</td><td>A&T</td><td>Status mismatch</td><td>27 Feb 1:58 PM</td></tr>
+                        <tr><td>REC-0005</td><td>WYC-2026-0841</td><td>CSRS</td><td>Accred</td><td>Timeout</td><td>27 Feb 1:45 PM</td></tr>
+                    </tbody>
+                </table>
+                <button class="btn btn-primary" style="margin-top: 20px;">Force Resync All</button>
+            </div>
+
+            <div class="screen" id="auditlogs-screen">
+                <h1 class="page-title">Audit Logs</h1>
+                <p class="page-subtitle">Complete record of system activities.</p>
+                <div class="filter-bar">
+                    <select style="min-width: 150px;"><option>All Modules</option><option>CSRS</option><option>A&T</option><option>Accred</option></select>
+                    <input type="text" placeholder="Search...">
+                    <input type="date">
+                </div>
+                <table class="table">
+                    <thead><tr><th>Time</th><th>User</th><th>Module</th><th>Action</th><th>Entity</th><th>Before</th><th>After</th></tr></thead>
+                    <tbody>
+                        <tr><td>27 Feb 2:50 PM</td><td>Rajesh Kumar</td><td><span class="badge badge-csrs">CSRS</span></td><td>Approve</td><td>Reg</td><td>Pending</td><td>Approved</td></tr>
+                        <tr><td>27 Feb 2:45 PM</td><td>Priya Sharma</td><td><span class="badge badge-at">A&T</span></td><td>Allocate</td><td>Room</td><td>—</td><td>Japan</td></tr>
+                        <tr><td>27 Feb 2:35 PM</td><td>Kavita Joshi</td><td><span class="badge badge-accred">Accred</span></td><td>Print</td><td>Badge</td><td>Ready</td><td>Printed</td></tr>
+                        <tr><td>27 Feb 2:20 PM</td><td>Amit Patel</td><td><span class="badge badge-csrs">CSRS</span></td><td>Verify</td><td>Doc</td><td>Pending</td><td>Verified</td></tr>
+                        <tr><td>27 Feb 2:10 PM</td><td>Neha Gupta</td><td><span class="badge badge-at">A&T</span></td><td>Update</td><td>Property</td><td>95</td><td>94</td></tr>
+                    </tbody>
+                </table>
+                <div class="pagination"><div class="pagination-item active">1</div><div class="pagination-item">2</div><div class="pagination-item">3</div></div>
+            </div>
+
+            <div class="screen" id="search-screen">
+                <h1 class="page-title">Global Search</h1>
+                <p class="page-subtitle">Search across all modules unified.</p>
+                <input type="text" class="search-bar" placeholder="Search by WYC ID, name, delegation, room, badge..." value="WYC-2026-001">
+                <div class="search-results">
+                    <div class="result-group">
+                        <div class="result-group-title">CSRS Results</div>
+                        <div class="result-item"><div style="font-weight: 600;">WYC-2026-0010</div><div style="color: #6B7280; font-size: 12px;">Status: Approved | Anjali Desai | India | 25 Feb</div></div>
+                    </div>
+                    <div class="result-group">
+                        <div class="result-group-title">A&T Results</div>
+                        <div class="result-item"><div style="font-weight: 600;">Room Assignment</div><div style="color: #6B7280; font-size: 12px;">Room 102, Grand Plaza | 1 Mar - 7 Mar | Confirmed</div></div>
+                    </div>
+                    <div class="result-group">
+                        <div class="result-group-title">Accreditation</div>
+                        <div class="result-item"><div style="font-weight: 600;">Badge Status</div><div style="color: #6B7280; font-size: 12px;">BAG-0010 | Athlete | Issued | 25 Feb</div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="screen" id="support-screen">
+                <h1 class="page-title">Support Desk</h1>
+                <p class="page-subtitle">Quick action utilities for support staff.</p>
+                <div class="action-cards-grid">
+                    <div class="action-card-form"><h3>Resend OTP</h3><div class="form-group"><label class="form-label">Email or Phone</label><input type="text" class="form-input" placeholder="user@wyc2026.org"></div><button class="btn btn-primary" style="width: 100%;">Resend OTP</button></div>
+                    <div class="action-card-form"><h3>Unlock Account</h3><div class="form-group"><label class="form-label">User Email</label><input type="email" class="form-input" placeholder="user@wyc2026.org"></div><button class="btn btn-primary" style="width: 100%;">Unlock</button></div>
+                    <div class="action-card-form"><h3>Resync Record</h3><div class="form-group"><label class="form-label">WYC ID</label><input type="text" class="form-input" placeholder="WYC-2026-0001"></div><div class="form-group"><label class="form-label">Direction</label><select class="form-input"><option>CSRS → A&T</option><option>CSRS → Accred</option></select></div><button class="btn btn-primary" style="width: 100%;">Resync</button></div>
+                    <div class="action-card-form"><h3>Reset Submission</h3><div class="form-group"><label class="form-label">WYC ID</label><input type="text" class="form-input" placeholder="WYC-2026-0001"></div><div class="form-group"><label class="form-label">Reason</label><textarea class="form-input" style="min-height: 60px;"></textarea></div><button class="btn btn-primary" style="width: 100%;">Reset</button></div>
+                </div>
+                <h3 class="section-header">Support Action Log</h3>
+                <table class="table">
+                    <thead><tr><th>Action</th><th>Target</th><th>By</th><th>Time</th><th>Result</th></tr></thead>
+                    <tbody>
+                        <tr><td>Resend OTP</td><td>priya@wyc</td><td>Deepa</td><td>2:40 PM</td><td><span class="badge badge-active">Success</span></td></tr>
+                        <tr><td>Unlock Account</td><td>rohan@wyc</td><td>Rajesh</td><td>2:30 PM</td><td><span class="badge badge-active">Success</span></td></tr>
+                        <tr><td>Resync Record</td><td>WYC-0823</td><td>Deepa</td><td>2:15 PM</td><td><span class="badge badge-active">Success</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="screen" id="reports-screen">
+                <h1 class="page-title">Reports Center</h1>
+                <p class="page-subtitle">Generate and export reports from all modules.</p>
+                <div class="report-cards">
+                    <div class="report-card"><div class="report-card-id">RPT-CSRS-01</div><div class="report-card-name">Submission Pipeline</div><span class="badge badge-csrs">CSRS</span><div class="report-card-desc">Breakdown by status and delegation.</div><div class="report-card-actions"><button class="btn btn-primary">Generate</button><button class="btn btn-secondary">Export</button></div></div>
+                    <div class="report-card"><div class="report-card-id">RPT-AT-01</div><div class="report-card-name">Rooming List</div><span class="badge badge-at">A&T</span><div class="report-card-desc">Room assignments and occupancy.</div><div class="report-card-actions"><button class="btn btn-primary">Generate</button><button class="btn btn-secondary">Export</button></div></div>
+                    <div class="report-card"><div class="report-card-id">RPT-ACC-01</div><div class="report-card-name">Ready to Print Queue</div><span class="badge badge-accred">Accred</span><div class="report-card-desc">Badges ready for printing.</div><div class="report-card-actions"><button class="btn btn-primary">Generate</button><button class="btn btn-secondary">Export</button></div></div>
+                    <div class="report-card"><div class="report-card-id">RPT-CSRS-02</div><div class="report-card-name">Delegation Roster</div><span class="badge badge-csrs">CSRS</span><div class="report-card-desc">Athletes and support staff.</div><div class="report-card-actions"><button class="btn btn-primary">Generate</button><button class="btn btn-secondary">Export</button></div></div>
+                    <div class="report-card"><div class="report-card-id">RPT-AT-02</div><div class="report-card-name">Occupancy Summary</div><span class="badge badge-at">A&T</span><div class="report-card-desc">Occupancy rates by property.</div><div class="report-card-actions"><button class="btn btn-primary">Generate</button><button class="btn btn-secondary">Export</button></div></div>
+                    <div class="report-card"><div class="report-card-id">RPT-ACC-02</div><div class="report-card-name">Issuance Log</div><span class="badge badge-accred">Accred</span><div class="report-card-desc">Complete badge issuance log.</div><div class="report-card-actions"><button class="btn btn-primary">Generate</button><button class="btn btn-secondary">Export</button></div></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function navigate(screen) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screen + '-screen').classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            event.target.closest('.nav-item').classList.add('active');
+        }
+
+        function switchTab(event, tabId) {
+            event.preventDefault();
+            const tabContent = document.getElementById(tabId);
+            const tabBar = event.target.closest('.tab-bar');
+            if (!tabContent || !tabBar) return;
+            tabBar.querySelectorAll('.tab-item').forEach(item => item.classList.remove('active'));
+            event.target.classList.add('active');
+            const parent = tabContent.parentElement;
+            parent.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            tabContent.classList.add('active');
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.style.display = sidebar.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function handleLogout() {
+            alert('Logout would redirect to login page');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('.nav-item').classList.add('active');
+            document.getElementById('dashboard-screen').classList.add('active');
+        });
+    </script>
+</body>
+</html>
